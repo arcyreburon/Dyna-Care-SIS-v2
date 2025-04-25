@@ -50,6 +50,13 @@ include '../includes/footer.php';
     </ul>
 </div>
 
+<style>
+    .bi.bi-three-dots {
+        font-size: 24px; /* Increase the size as needed */
+        color: black; !important
+    }
+</style>
+
             </h5>
 
             <h4 class="card-text">

@@ -147,6 +147,7 @@
     <source src="assets/video/DYNACARE.mp4" type="video/mp4">
 </video>
 
+<!-- Performance limit-->
   <script>
       document.addEventListener("DOMContentLoaded", function() {
           let video = document.getElementById("background-video");
@@ -376,7 +377,7 @@
         <div class="bg-white shadow p-4 rounded contact-box">
           <i class="mdi-map-marker text-primary mdi" style="font-size: 28px;"></i>
           <h5 class="mt-3">Our Address</h5>
-          <p class="text-muted">17.650069, 120.414504, Santo Domingo, Lalawigan ng Ilocos Sur</p>
+          <p class="text-muted">17.650069, 120.414504, Santo Domingo, Ilocos Sur</p>
         </div>
       </div>
 
@@ -420,7 +421,7 @@
       <div class="col-md-12">
         <p class="mb-2">&copy; DynaCareSIS System 2025. All Rights Reserved.</p>
         
-        <!-- Social Media Icons -->
+        <!-- Social Media Icons --> <!-- Input -->
         <div class="mt-2 social-icons">
           <a href="#" class="mx-2 text-white"><i class='bx bxl-facebook-circle'></i></a>
           <a href="#" class="mx-2 text-white"><i class='bx bxl-twitter'></i></a>
