@@ -57,7 +57,7 @@
             color:rgb(0, 0, 0);
         }
         .left h2 {
-            font-size: 40px;
+            font-size: 25px;
             color:rgb(0, 0, 0); !important
             margin: 0 0 30px;
         }
@@ -121,7 +121,7 @@
         <div class="left">
             <h1 style="margin-top: 60px; font-weight: 900;">  DCSIS  </h1>
             <hr>
-            <h2 style="margin-top: -10px;">HEALTH SOLUTION</h2>
+            <h2 style="font-weight: 800;">HEALTH SOLUTION</h2>
         </div>
         <div class="right">
             <h2 style="letter-spacing: 2px; font-weight: 800;">LOGIN</h2>

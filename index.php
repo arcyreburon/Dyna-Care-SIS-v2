@@ -141,9 +141,27 @@
 </script>
 
 <div id="home" class="site-blocks-cover" style="background-color: #F6F6F6; position: relative; padding-top: 20px; padding-left: 7rem; padding-right: 7rem;">
-  <video autoplay muted loop id="background-video" class="background-video" disablePictureInPicture>
+
+<!-- Background Video -->
+<video autoplay muted loop id="background-video" class="background-video" disablePictureInPicture>
     <source src="assets/video/DYNACARE.mp4" type="video/mp4">
-  </video>
+</video>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          let video = document.getElementById("background-video");
+
+          // Check system performance using available RAM (navigator.deviceMemory)
+          let deviceMemory = navigator.deviceMemory || 4; // Defaults to 4GB if unknown
+
+          if (deviceMemory < 4) {
+              video.pause(); // Pause video for lower-end laptops
+          } else {
+              video.play(); // Play video for high-end laptops
+          }
+      });
+  </script>
+
   <div class="container-fluid">
     <div class="row">
       <!-- Carousel Section -->
@@ -181,7 +199,7 @@
           <div class="site-block-cover-content text-center" style="position: relative; z-index: 1;">
             <h1 style="text-align: right; font-family: 'Poppins'; font-weight:900; font-style: normal; font-size: 80px; color:black;">DynaCareSIS</h1>
             <h1 style="text-align: right; font-family: 'Poppins'; font-weight:700; font-style: normal; font-size: 50px; white-space: nowrap; color: black; margin-top: -30px;">Health Solutions</h1>
-            <h2 class="sub-title" style="text-transform: none; !important text-align: right; !important align-item: right; !important font-family: 'Poppins'; font-weight:400; font-style: normal; font-size: 22px; letter-spacing: 307; white-space: nowrap; color: black;margin-top: -30px; text-align: right;">Effective Medicine, New Medicine Everyday</h2>
+            <h2 class="sub-title" style="text-transform: none; text-align: right; align-item: right; font-family: 'Poppins'; font-weight:400; font-style: normal; font-size: 22px; letter-spacing: 307; white-space: nowrap; color: black;margin-top: -30px; text-align: right;">Effective Medicine, New Medicine Everyday</h2>
             <p style="text-align: right;">
               <br>
               <a href="login.php" class="mt-3 px-5 py-3 btn btn-primary custom-button" style="font-weight: 700; border-radius:50px; text-align: right; !important">LOGIN</a>
