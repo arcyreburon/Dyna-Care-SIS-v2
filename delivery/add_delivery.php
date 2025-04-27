@@ -153,8 +153,24 @@ include '../includes/footer.php';
                                 <!-- Contact Number of Delivery Man -->
                                 <div class="mb-3 col-md-6">
                                     <label for="contact_number" class="form-label">Contact Number of Delivery Man <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="contact_number" name="contact_number">
+                                    <input type="text" class="form-control" id="contact_number" name="contact_number" maxlength="11" oninput="formatPhoneNumber(this)" required>
                                 </div>
+
+                                <script>
+                                    function formatPhoneNumber(input) {
+                                        // Remove non-digits
+                                        let value = input.value.replace(/\D/g, '');
+
+                                        // Limit to 11 digits
+                                        if (value.length > 11) {
+                                            value = value.substring(0, 11);
+                                        }
+
+                                        // Format with spacing: '0919 368 6141'
+                                        input.value = value.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3');
+                                    }
+                                </script>
+
 
                                 <!-- Submit Button -->
                                 <div class="col-12">
