@@ -84,7 +84,7 @@ include '../includes/footer.php';
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="cpnumber" class="form-label">Phone Number</label>
-                                        <input type="text" class="form-control" name="cpnumber" id="cpnumber" required maxlength="13" pattern="[0-9\s]{13}" title="Phone number should be in the format: 0912 345 6890" oninput="formatPhoneNumber(this)">
+                                        <input type="text" class="form-control" name="cpnumber" id="cpnumber" required maxlength="13" pattern="[0-9\s]{13}" title="Phone number should be in the format: 0912 345 6890" oninput="formatPhoneNumber(this)" required>
                                     </div>
 
                                     <!-- Remove non-numeric characters -->
@@ -119,7 +119,7 @@ include '../includes/footer.php';
                                     </div>
                                     <div class="mb-3 col-md-6">
                                     <label for="branch" class="form-label">Select Branch</label>
-                                    <select class="form-select" name="branches_id">
+                                    <select class="form-select" name="branches_id" required>
                                         <option value="" disabled selected>Select Branch</option>
                                         <?php
                                 

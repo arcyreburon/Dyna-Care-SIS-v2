@@ -104,7 +104,7 @@ include '../includes/footer.php';
                                             <th class="text-center">Item</th>
                                             <th class="text-center">Category</th>
                                             <th>Price</th>
-                                            <th>Batch</th>
+                                            <th>Batch No.</th>
                                             <th>Delivery Date</th>
                                             <th>Expiration Date</th>
                                             <th>Delivery Man</th>

@@ -213,18 +213,25 @@ include '../includes/footer.php';
                                 <div class="form-group row">
                                     <label for="vat" class="col-form-label col-sm-4">VAT (%):</label>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="vat" name="vat" value="0">
+                                        <input type="number" class="form-control" id="vat" name="vat" value="12" readonly>
                                     </div>
                                 </div>
+
+                                <script>
+                                    function applyVAT(price) {
+                                        const vatPercentage = 12; // Fixed VAT
+                                        return (price * vatPercentage / 100).toFixed(2); // Calculates VAT amount
+                                    }
+                                </script>
+
 
                                 <div class="form-group row">
                                     <label for="discount" class="col-form-label col-sm-4">Discount:</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" id="discount" name="discount">
                                             <option value="0">0%</option>
-                                            <option value="5">5%</option>
-                                            <option value="10">10%</option>
-                                            <option value="30">30%</option>
+                                            <option value="20">20%</option>
+                                            <option value="40">40%</option>
                                         </select>
                                     </div>
                                 </div>

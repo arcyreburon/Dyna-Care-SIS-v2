@@ -231,7 +231,7 @@ include '../includes/footer.php';
                                     <label for="oldPrice" class="form-label">Old Price</label>
                                     <div class="input-wrapper">
                                         <span class="peso-sign">₱</span>
-                                        <input type="text" class="form-control currency-input" id="oldPrice" name="old_price" value="<?= $oldPrice ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
+                                        <input type="text" class="form-control currency-input" id="oldPrice" name="old_price" value="<?= $oldPrice ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" required>
                                     </div>
                                 </div>
 
@@ -282,7 +282,7 @@ include '../includes/footer.php';
                     
                                 <!-- Batch -->
                                 <div class="mb-3 col-md-6">
-                                    <label for="batch" class="form-label">Batch <span class="text-danger">*</span></label>
+                                    <label for="batch" class="form-label">Batch No. / Lot No.<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="batch" name="batch" value="<?= $batch ?>" required>
                                 </div>
 

@@ -128,13 +128,13 @@ include '../includes/footer.php';
                             <table id="myTable" class="custom-table table table-bordered table-hover table-striped">
     <thead class="table-dark">
         <tr>
-            <th class="text-center">Branch</th>
+            <th class="text-center">Branch Name</th>
             <th class="text-center">Item</th>
             <th class="text-center">Category</th> <!-- New column for category -->
             <th>Old Price</th>
             <th>Selling Price</th>
             <th class="text-center">Available Stock</th>
-            <th>Batch</th>
+            <th>Batch No.</th>
             <th>Delivery Date</th>
             <th>Expiration Date</th>
             <th class="text-center">Action</th>
