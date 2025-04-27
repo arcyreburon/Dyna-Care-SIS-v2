@@ -10,8 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="C:\assets\img\dyna.png">
-  <link href="../assets/img/dyna.png" rel="icon">
+  <link href="../assets/img/dyna.png" type="image/x-icon" rel="icon">
   <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
