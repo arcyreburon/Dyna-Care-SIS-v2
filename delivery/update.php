@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $productId) {
     INNER JOIN others o ON p.id = o.products_id
     SET i.avail_stock = ?, i.price = ?, i.delivery_price = ?, i.damage_stock = ?, 
         p.product_name = ?, p.expiration_date = ?, p.categories_id = ?, 
-        o.batch = ?, o.supplier = ?, o.old_price = ?, o.brand = ?, o.dosage = ?, o.received = ?, o.delivery_man = ?
+        o.batch = ?, o.old_price = ?, o.brand = ?, o.delivery_man = ?
     WHERE i.id = ?";
 
     $stmt = $con->prepare($sql);
@@ -105,14 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $productId) {
 // Fetch product details for updating
 if ($productId) {
     $sql = "SELECT i.id, i.avail_stock, i.price, i.delivery_price, i.damage_stock, 
-                   p.product_name, p.expiration_date, p.categories_id, 
-                   o.batch, o.supplier, o.old_price, o.brand, o.dosage, o.received, o.delivery_man,
-                   c.category_name
-            FROM inventory i
-            INNER JOIN products p ON i.products_id = p.id
-            INNER JOIN categories c ON p.categories_id = c.id
-            INNER JOIN others o ON p.id = o.products_id
-            WHERE i.id = ?";
+                p.product_name, p.expiration_date, p.categories_id, 
+                o.batch, o.old_price, o.brand, o.delivery_man,
+                c.category_name
+         FROM inventory i
+         INNER JOIN products p ON i.products_id = p.id
+         INNER JOIN categories c ON p.categories_id = c.id
+         INNER JOIN others o ON p.id = o.products_id
+         WHERE i.id = ?";
 
     $stmt = $con->prepare($sql);
     if ($stmt) {

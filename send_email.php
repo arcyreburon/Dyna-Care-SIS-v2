@@ -22,8 +22,8 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'dynacare2025@gmail.com';
-    $mail->Password = 'pxyrvnadbdbdlujn'; // Your Gmail app password
+    $mail->Username = 'dynacare.sis@gmail.com';
+    $mail->Password = 'altrzkxockdikipf '; // Your Gmail app password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
         
