@@ -58,7 +58,7 @@ include '../includes/footer.php';
                 <div class="col-lg-12">
                     <div class="shadow-sm card">
                         <div class="text-black card-header">
-                            <h3 class="mb-0">Inventory List</h3>
+                            <h3 class="mb-0">Delivery List</h3>
                             <a href="release_stock.php" class="mt-4 btn btn-primary">
                             <i class="bi-arrow-bar-up bi"></i> Release Stock
                             </a>
