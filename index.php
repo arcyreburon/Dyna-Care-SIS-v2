@@ -39,7 +39,7 @@
     <!-- Logo Section -->
     <div class="d-flex align-items-center site-logo">
       <img src="assets/img/dynaa.png" alt="Logo" style="margin-right: 10px; border-radius: 50%; width: 50px; height: 50px; object-fit: cover;">
-      <a href="#home" class="fw-bold text-dark fs-4">DCSIS</a>
+      <a href="#home" class="fw-bold text-dark fs-4">DynaCareSIS</a>
     </div>
 
     <!-- Navigation Links -->
