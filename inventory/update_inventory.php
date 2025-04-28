@@ -237,7 +237,7 @@ include '../includes/footer.php';
 
 
 
-                                                                <!-- Delivery Price -->
+                                <!-- Delivery Price -->
                                 <div class="col-md-6">
                                     <label for="deliveryPrice" class="form-label">Delivery Price <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="deliveryPrice" name="delivery_price" value="<?= $delivery ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" required>
