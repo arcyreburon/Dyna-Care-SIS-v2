@@ -96,47 +96,133 @@ include '../includes/footer.php';
                                 </div>
                             </form>
 
+                           <!-- Replace the table section with this minimal version -->
                             <div class="table-responsive">
-                                <table id="myTable" class="custom-table table table-bordered table-hover table-striped">
-                                    <thead class="table-dark">
+                                <table id="myTable" class="table">
+                                    <thead>
                                         <tr>
-                                            <th class="text-center">Supplier</th>
-                                            <th class="text-center">Item</th>
-                                            <th class="text-center">Category</th>
+                                            <th>Supplier</th>
+                                            <th>Item</th>
+                                            <th>Category</th>
                                             <th>Price</th>
-                                            <th>Batch No.</th>
-                                            <th>Delivery Date</th>
-                                            <th>Expiration Date</th>
+                                            <th>Batch</th>
+                                            <th>Delivered</th>
+                                            <th>Expires</th>
                                             <th>Delivery Man</th>
-                                            <th class="text-center">Action</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php if ($result->num_rows > 0): ?>
                                             <?php while ($row = $result->fetch_assoc()): ?>
                                                 <tr>
-                                                    <td class='text-center'><?php echo htmlspecialchars($row['supplier']); ?></td>
-                                                    <td class='text-center'><?php echo htmlspecialchars($row['product_name']); ?></td>
-                                                    <td class='text-center'><?php echo htmlspecialchars($row['category_name']); ?></td>
-                                                    <td class='text-center'>₱<?php echo $row['price']; ?></td>
-                                                    <td class='text-center'><?php echo $row['batch']; ?></td>
-                                                    <td class='text-center'><?php echo $row['received']; ?></td>
-                                                    <td class='text-center'><?php echo $row['expiration_date']; ?></td>
-                                                    <td class='text-center'><?php echo $row['delivery_man']; ?></td>
-                                                    <td class='text-center'>
-                                                        <a href='update.php?id=<?php echo $row['id']; ?>' class='btn btn-sm btn-warning'>
-                                                            <i class='bi bi-pencil-square'></i>
+                                                    <td><?php echo htmlspecialchars($row['supplier']); ?></td>
+                                                    <td>
+                                                        <strong><?php echo htmlspecialchars($row['product_name']); ?></strong>
+                                                    </td>
+                                                    <td><?php echo htmlspecialchars($row['category_name']); ?></td>
+                                                    <td>₱<?php echo number_format($row['price'], 2); ?></td>
+                                                    <td><span class="badge bg-light text-dark"><?php echo $row['batch']; ?></span></td>
+                                                    <td><small><?php echo date('M d, Y', strtotime($row['received'])); ?></small></td>
+                                                    <td>
+                                                        <?php if ($row['expiration_date']): ?>
+                                                            <span class="badge bg-<?php echo (strtotime($row['expiration_date']) < strtotime('+30 days') ? 'warning' : 'light'); ?> text-dark">
+                                                                <?php echo date('M Y', strtotime($row['expiration_date'])); ?>
+                                                            </span>
+                                                        <?php else: ?>
+                                                            -
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td><small><?php echo $row['delivery_man'] ? htmlspecialchars($row['delivery_man']) : '-'; ?></small></td>
+                                                    <td>
+                                                        <a href='update.php?id=<?php echo $row['id']; ?>' class='btn btn-sm btn-outline-primary'>
+                                                            <i class='bi bi-pencil'></i>
                                                         </a>
                                                     </td>
                                                 </tr>
                                             <?php endwhile; ?>
                                         <?php else: ?>
-                                            <tr><td colspan='9' class='text-center'>No inventory records found</td></tr>
+                                            <tr>
+                                                <td colspan='9' class='text-center py-4 text-muted'>
+                                                    No delivery records found
+                                                </td>
+                                            </tr>
                                         <?php endif; ?>
                                         <?php $con->close(); ?>
                                     </tbody>
                                 </table>
                             </div>
+
+                            <style>
+                                /* Minimal table styling */
+                                #myTable {
+                                    --bs-table-bg: transparent;
+                                    --bs-table-striped-bg: rgba(0,0,0,0.02);
+                                    --bs-table-hover-bg: rgba(0,0,0,0.04);
+                                    font-size: 0.9rem;
+                                    border-collapse: separate;
+                                    border-spacing: 0;
+                                }
+                                
+                                #myTable th {
+                                    font-weight: 500;
+                                    background-color: #f8f9fa;
+                                    border-bottom: 2px solid #dee2e6;
+                                    padding: 0.75rem 1rem;
+                                    white-space: nowrap;
+                                }
+                                
+                                #myTable td {
+                                    padding: 0.75rem 1rem;
+                                    border-bottom: 1px solid #dee2e6;
+                                    vertical-align: middle;
+                                }
+                                
+                                #myTable tr:last-child td {
+                                    border-bottom: none;
+                                }
+                                
+                                /* Compact badges */
+                                .badge {
+                                    font-weight: 500;
+                                    padding: 0.35em 0.5em;
+                                }
+                                
+                                /* Responsive adjustments */
+                                @media (max-width: 768px) {
+                                    #myTable {
+                                        font-size: 0.85rem;
+                                    }
+                                    
+                                    #myTable th, 
+                                    #myTable td {
+                                        padding: 0.5rem;
+                                    }
+                                }
+                            </style>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const dataTable = new simpleDatatables.DataTable("#myTable", {
+                                        perPage: 15,
+                                        perPageSelect: [10, 15, 25, 50, 100],
+                                        labels: {
+                                            placeholder: "Search deliveries...",
+                                            perPage: "{select} per page",
+                                            noRows: "No matching records found",
+                                            info: "Showing {start} to {end} of {rows} items"
+                                        },
+                                        classes: {
+                                            active: "active",
+                                            disabled: "disabled",
+                                            selector: "form-select",
+                                            paginationList: "pagination",
+                                            paginationListItem: "page-item",
+                                            paginationListItemLink: "page-link"
+                                        }
+                                    });
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>

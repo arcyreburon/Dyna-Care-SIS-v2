@@ -78,6 +78,53 @@ include '../includes/sidebar.php';
 include '../includes/footer.php';
 ?>
 
+<style>
+    /* Minimal table styling */
+    #myTable {
+        --bs-table-bg: transparent;
+        --bs-table-striped-bg: rgba(0,0,0,0.02);
+        --bs-table-hover-bg: rgba(0,0,0,0.04);
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 0.9rem;
+    }
+    
+    #myTable th {
+        font-weight: 500;
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        white-space: nowrap;
+    }
+    
+    #myTable td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: middle;
+    }
+    
+    #myTable tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Compact action buttons */
+    .btn-group-sm .btn {
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        #myTable {
+            font-size: 0.85rem;
+        }
+        
+        #myTable th, 
+        #myTable td {
+            padding: 0.5rem;
+        }
+    }
+</style>
+
 <main id="main" class="main">
     <section class="dashboard section">
         <div class="container">
@@ -111,67 +158,80 @@ include '../includes/footer.php';
                                 </div>
                             <?php endif; ?>
 
-    <div class="mt-3 mb-3 col-md-4">
-        <label for="categoryFilter" class="form-label">Filter by Category</label>
-        <select id="categoryFilter" name="category_id" class="form-select" onchange="this.form.submit()">
-            <option value="">Select Category</option>
-            <?php while ($category = $result_categories->fetch_assoc()): ?>
-                <option value="<?php echo $category['id']; ?>" <?php echo ($category_id == $category['id']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($category['category_name']); ?>
-                </option>
-            <?php endwhile; ?>
-        </select>
-    </div>
-</form>
+                            <div class="mt-3 mb-3 col-md-4">
+                                <label for="categoryFilter" class="form-label">Filter by Category</label>
+                                <select id="categoryFilter" name="category_id" class="form-select" onchange="this.form.submit()">
+                                    <option value="">Select Category</option>
+                                    <?php while ($category = $result_categories->fetch_assoc()): ?>
+                                        <option value="<?php echo $category['id']; ?>" <?php echo ($category_id == $category['id']) ? 'selected' : ''; ?>>
+                                            <?php echo htmlspecialchars($category['category_name']); ?>
+                                        </option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                        </form>
 
                             <div class="table-responsive">
-                            <table id="myTable" class="custom-table table table-bordered table-hover table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th class="text-center">Branch Name</th>
-            <th class="text-center">Item</th>
-            <th class="text-center">Category</th> <!-- New column for category -->
-            <th>Old Price</th>
-            <th>Selling Price</th>
-            <th class="text-center">Available Stock</th>
-            <th>Batch No.</th>
-            <th>Delivery Date</th>
-            <th>Expiration Date</th>
-            <th class="text-center">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                  <td class='text-center'>" . htmlspecialchars($row['branch_name']) . "</td>
-                    <td class='text-center'>" . htmlspecialchars($row['product_name']) . "</td>
-                    <td class='text-center'>" . htmlspecialchars($row['category_name']) . "</td> 
-                    <td class='text-center'>₱" . $row['old_price'] . "</td>
-                    <td class='text-center'>₱" . $row['price'] . "</td>
-                    <td class='text-center'>" . $row['avail_stock'] . "</td>
-                    <td class='text-center'>" . $row['batch'] . "</td>
-                    <td class='text-center'>" . $row['received'] . "</td>
-                    <td class='text-center'>" . $row['expiration_date'] . "</td>
-                    <td class='text-center'>
-                        <a href='update_inventory.php?id=" . $row['id'] . "' class='btn btn-sm btn-warning'>
-                            <i class='bi bi-pencil-square'></i> 
-                        </a>
-                        <a href='delete.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'>
-                            <i class='bi bi-trash'></i>
-                        </a>
-                    </td>
-                </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='9' class='text-center'>No inventory records found</td></tr>"; // Adjusted colspan to 9
-        }
-
-        $con->close();
-        ?>
-    </tbody>
-</table>
+                                <table id="myTable" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Branch</th>
+                                            <th>Item</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Stock</th>
+                                            <th class="medicine-column">Expiry</th>
+                                            <th class="medicine-column">Batch</th>
+                                            <th>Updated</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                $isMedicine = stripos($row['category_name'], 'medicine') !== false;
+                                                
+                                                echo "<tr>
+                                                    <td>" . htmlspecialchars($row['branch_name']) . "</td>
+                                                    <td>
+                                                        <strong>" . htmlspecialchars($row['product_name']) . "</strong>
+                                                        " . ($row['brand'] ? "<br><small class='text-muted'>" . htmlspecialchars($row['brand']) . "</small>" : "") . "
+                                                    </td>
+                                                    <td>" . htmlspecialchars($row['category_name']) . "</td>
+                                                    <td>
+                                                        <strong>₱" . number_format($row['price'], 2) . "</strong>
+                                                        " . ($row['old_price'] && $row['old_price'] != $row['price'] ? 
+                                                            "<br><small class='text-muted text-decoration-line-through'>₱" . number_format($row['old_price'], 2) . "</small>" : "") . "
+                                                    </td>
+                                                    <td>
+                                                        <span class='badge bg-" . ($row['avail_stock'] > 10 ? 'success' : ($row['avail_stock'] > 0 ? 'warning' : 'danger')) . "'>
+                                                            " . $row['avail_stock'] . "
+                                                        </span>
+                                                        " . ($row['damage_stock'] > 0 ? 
+                                                            "<br><small class='text-danger'>Damaged: " . $row['damage_stock'] . "</small>" : "") . "
+                                                    </td>
+                                                    <td class='medicine-column'>" . ($row['expiration_date'] ?? '-') . "</td>
+                                                    <td class='medicine-column'>" . ($row['batch'] ?? '-') . "</td>
+                                                    <td><small>" . $row['received'] . "</small></td>
+                                                    <td>
+                                                        <div class='btn-group btn-group-sm'>
+                                                            <a href='update_inventory.php?id=" . $row['id'] . "' class='btn btn-outline-primary'>
+                                                                <i class='bi bi-pencil'></i>
+                                                            </a>
+                                                            <a href='delete.php?id=" . $row['id'] . "' class='btn btn-outline-danger' onclick='return confirm(\"Are you sure?\")'>
+                                                                <i class='bi bi-trash'></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='9' class='text-center py-4 text-muted'>No inventory records found</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div> <!-- End Card -->
@@ -188,26 +248,88 @@ include '../includes/footer.php';
     });
 </script>
 
-<!-- Custom CSS for Table Borders -->
-<style>
-    .custom-table {
-        border-collapse: collapse;
-        width: 100%;
-    }
+<!-- JavaScript for dynamic column toggling -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const categoryFilter = document.getElementById('categoryFilter');
+        
+        // Function to toggle columns based on category
+        function toggleColumns() {
+            const selectedOption = categoryFilter.options[categoryFilter.selectedIndex];
+            const isMedicine = selectedOption.text.toLowerCase().includes('medicine');
+            
+            // Toggle medicine columns
+            document.querySelectorAll('.medicine-column').forEach(col => {
+                col.style.display = isMedicine ? 'table-cell' : 'none';
+            });
+            
+            // Toggle supply columns
+            document.querySelectorAll('.supply-column').forEach(col => {
+                col.style.display = isMedicine ? 'none' : 'table-cell';
+            });
+            
+            // Reinitialize DataTable to adjust column widths
+            if (typeof dataTable !== 'undefined') {
+                dataTable.refresh();
+            }
+        }
+        
+        // Initial toggle based on current selection
+        toggleColumns();
+        
+        // Add event listener for category filter changes
+        categoryFilter.addEventListener('change', toggleColumns);
+        
+        // Initialize DataTable
+        const dataTable = new simpleDatatables.DataTable("#myTable", {
+            perPage: 10,
+            labels: {
+                placeholder: "Search...",
+                perPage: "{select} entries per page",
+                noRows: "No entries found",
+                info: "Showing {start} to {end} of {rows} entries"
+            }
+        });
+    });
+</script>
 
-    .custom-table th,
-    .custom-table td {
-        border: 1px solid #dee2e6 !important;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .custom-table thead th {
-        background-color: rgb(168, 168, 168);
-        color: white;
-    }
-
-    .custom-table tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dataTable = new simpleDatatables.DataTable("#myTable", {
+            perPage: 15,
+            perPageSelect: [10, 15, 25, 50, 100],
+            labels: {
+                placeholder: "Search inventory...",
+                perPage: "{select} per page",
+                noRows: "No matching records found",
+                info: "Showing {start} to {end} of {rows} items"
+            },
+            classes: {
+                active: "active",
+                disabled: "disabled",
+                selector: "form-select",
+                paginationList: "pagination",
+                paginationListItem: "page-item",
+                paginationListItemLink: "page-link"
+            }
+        });
+        
+        // Toggle medicine-specific columns based on category filter
+        function toggleColumns() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const selectedOption = categoryFilter?.options[categoryFilter.selectedIndex];
+            const isMedicine = selectedOption?.text.toLowerCase().includes('medicine') ?? false;
+            
+            document.querySelectorAll('.medicine-column').forEach(col => {
+                col.style.display = isMedicine ? 'table-cell' : 'none';
+            });
+            
+            if (dataTable) {
+                dataTable.refresh();
+            }
+        }
+        
+        toggleColumns();
+        document.getElementById('categoryFilter')?.addEventListener('change', toggleColumns);
+    });
+</script>

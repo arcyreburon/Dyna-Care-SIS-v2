@@ -116,32 +116,28 @@
             </script>
 
             <li class="dropdown nav-item pe-3">
+                <a class="nav-link nav-profile d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+                    <img src="/dyna/Dyna-Care-SIS-v2/assets/img/messages-3.jpg" alt="Profile" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                    <span class="d-md-block dropdown-toggle"><?php echo $_SESSION['name']; ?></span>
+                </a>
 
-                <a class="d-flex align-items-center nav-link nav-profile pe-0" href="#" data-bs-toggle="dropdown">
-                    <span class="d-md-block d-none dropdown-toggle ps-2"><?php echo $_SESSION['name']; ?></span>
-                </a><!-- End Profile Iamge Icon -->
-
-                <ul class="dropdown-menu dropdown-menu-arrow dropdown-menu-end profile">
-                    <li class="dropdown-header">
-                        <h6><?php echo $_SESSION['name']; ?></h6>
-                        <span><?php echo $_SESSION['user_role']; ?></span>
+                <ul class="dropdown-menu dropdown-menu-end" style="min-width: 240px; padding: 0.5rem 0;">
+                    <li class="px-3 py-2 d-flex align-items-center">
+                        <img src="/dyna/Dyna-Care-SIS-v2/assets/img/messages-3.jpg" alt="Profile" class="rounded-circle me-2" style="width: 48px; height: 48px; object-fit: cover;">
+                        <div style="line-height: 1.2;">
+                            <h6 style="margin-bottom: 0.2rem; font-weight: 600;"><?php echo $_SESSION['name']; ?></h6>
+                            <small class="text-muted"><?php echo $_SESSION['user_role']; ?></small>
+                        </div>
                     </li>
+                    <li><hr class="dropdown-divider my-2"></li>
                     <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-
-                    <li>
-                        <a class="d-flex align-items-center dropdown-item" href="../php/logout.php">
-                            <i class="bi-box-arrow-right bi"></i>
+                        <a class="dropdown-item px-3 py-2" href="../php/logout.php" style="border-radius: 4px;">
+                            <i class="bi bi-box-arrow-right me-2"></i>
                             <span>Sign Out</span>
                         </a>
                     </li>
-
-
-                </ul><!-- End Profile Dropdown Items -->
-            </li><!-- End Profile Nav -->
-
+                </ul>
+            </li>
         </ul>
     </nav><!-- End Icons Navigation -->
 

@@ -320,227 +320,65 @@
   }
 
 </style>
-
-<!-- Products Section -->
 <div class="bg-light py-5 site-section">
   <div class="container">
 
-<!-- About Us Section -->
-<div id="about" class="bg-light py-5 site-section">
-  <div class="container">
-    <div class="justify-content-center row">
-      <div class="text-center col-12 title-section">
-        <h2 style="font-size: 3rem;">ABOUT US</h2>
-      </div>
+<!-- About Us -->
+<section id="about" class="container py-5">
+  <h2 class="text-center mb-5">ABOUT US</h2>
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <h3>Who We Are</h3>
+      <p>
+        We are a leading company dedicated to providing high-quality products and services. 
+        With years of industry experience, we focus on innovation, customer satisfaction, 
+        and sustainable growth.
+      </p>
     </div>
-
-    <div class="row"">
-      <!-- Left Side: Text Content -->
-      <div class="col-lg-6" style="text-align: center !important;">
-        <div class="p-4" style="margin-left: 20px; margin-right: 20px;">
-          <h3 class="mb-3 text-dark">Who We Are</h3>
-          <p class="text-dark" style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-            We are a leading company dedicated to providing high-quality products and services. 
-            With years of industry experience, we focus on innovation, customer satisfaction, 
-            and sustainable growth. Our team is composed of passionate professionals committed to 
-            excellence and integrity.
-          </p>
-        </div>
-      </div>
-      <!-- Right Side: Image -->
-      <div class="col-lg-6" style="text-align: center !important;">
-            <h3 class="mt-4 text-dark">Our Mission</h3>
-          <p class="text-dark" style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
-            Our mission is to create solutions that make life easier and businesses more efficient. 
-            We believe in building strong relationships with our clients, founded on trust and reliability. 
-            Join us on our journey to make a meaningful impact in the world.
-          </p>
-      </div>
+    <div class="col-md-6">
+      <h3>Our Mission</h3>
+      <p>
+        Our mission is to create solutions that make life easier and businesses more efficient. 
+        We believe in building strong relationships with our clients, founded on trust and reliability.
+      </p>
     </div>
   </div>
-</div>
+</section>
 
-
-
-<!-- Contact Section -->
-<div id="contact" class="bg-light py-5 site-section">
+<!-- Contact -->
+<section id="contact" class="bg-light py-5">
   <div class="container">
-    <div class="justify-content-center row">
-      <div class="text-center col-12 title-section">
-        <h2 style="font-size: 3rem;">CONTACT US</h2>
-      </div>
-    </div>
-
-    <div class="text-center row">
-      <!-- Address -->
-      <div class="mb-4 col-md-4">
-        <div class="bg-white shadow p-4 rounded contact-box">
-          <i class="mdi-map-marker text-primary mdi" style="font-size: 28px;"></i>
-          <h5 class="mt-3">Our Address</h5>
-          <p class="text-muted">17.650069, 120.414504, Santo Domingo, Ilocos Sur</p>
-        </div>
-      </div>
-
-      <!-- Email -->
-      <div class="mb-4 col-md-4">
-        <div class="bg-white shadow p-4 rounded contact-box">
-          <i class="text-primary mdi mdi-email" style="font-size: 28px;"></i>
-          <h5 class="mt-3">Email Us</h5>
-          <p class="text-muted"><a href="mailto:dynacare.sis@gmail.com" class="text-decoration-none">dynacare.sis@gmail.com</a></p>
-        </div>
-      </div>
-
-      <!-- Phone -->
-      <div class="mb-4 col-md-4">
-        <div class="bg-white shadow p-4 rounded contact-box">
-          <i class="text-primary mdi mdi-phone" style="font-size: 28px;"></i>
-          <h5 class="mt-3">Call Us</h5>
-          <p class="text-muted"><a href="tel:+9193686141" class="text-decoration-none">+919 368 6141</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-  a {
-    color: rgb(255, 129, 160);
-  }
-
-  a:hover{
-    color: rgb(255, 129, 160);
-  }
-</style>
-
-
-
-<!-- Footer Section -->
-<footer class="bg-dark py-4 text-white text-center footer" style="border-top: 3px solid rgb(255, 152, 178);">
-  <div class="container">
+    <h2 class="text-center mb-5">CONTACT US</h2>
     <div class="row">
-      <div class="col-md-12">
-        <p class="mb-2">&copy; DynaCareSIS System 2025. All Rights Reserved.</p>
-        
-        <!-- Social Media Icons --> <!-- Input -->
-        <div class="mt-2 social-icons">
-          <a href="#" class="mx-2 text-white"><i class='bx bxl-facebook-circle'></i></a>
-          <a href="#" class="mx-2 text-white"><i class='bx bxl-twitter'></i></a>
-          <a href="#" class="mx-2 text-white"><i class='bx bxl-instagram-alt'></i></a>
-          <a href="#" class="mx-2 text-white"><i class='bx bxl-tiktok'></i></a>
-        </div>
-        
-        <p class="mt-2 text-muted small">Designed by <b>Arcy Mae Christian S. Reburon<b></p>
+      <div class="col-md-4 mb-4">
+        <h5>Our Address</h5>
+        <p>17.650069, 120.414504, Santo Domingo, Ilocos Sur</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h5>Email Us</h5>
+        <p><a href="mailto:dynacare.sis@gmail.com">dynacare.sis@gmail.com</a></p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h5>Call Us</h5>
+        <p><a href="tel:+9193686141">+919 368 6141</a></p>
       </div>
     </div>
   </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 text-center">
+  <p>&copy; DynaCareSIS System 2025. All Rights Reserved.</p>
+  <p class="small text-muted">Designed by Arcy Mae Christian S. Reburon</p>
 </footer>
 
-
-  </div>
-
-  <script src="pharma/js/jquery-3.3.1.min.js"></script>
-  <script src="pharma/js/jquery-ui.js"></script>
-  <script src="pharma/js/popper.min.js"></script>
-  <script src="pharma/js/bootstrap.min.js"></script>
-  <script src="pharma/js/owl.carousel.min.js"></script>
-  <script src="pharma/js/jquery.magnific-popup.min.js"></script>
-  <script src="pharma/js/aos.js"></script>
-
-  <script src="pharma/js/main.js"></script>
-
-  <style>
-    * {
-      font-family:'Poppins';
-    }
-    .product-img {
-      width: 200px;
-      height: 200px;
-      object-fit: contain; /* Ensures the entire image fits inside without stretching */
-      background-color: transparent; /* Removes background */
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .product-img:hover {
-      transform: scale(1.1);
-    }
-
-    .owl-nav {
-      display: none; /* Hides navigation arrows */
-    }
-
-    .owl-dots {
-      margin-top: 15px;
-    }
-
-    .owl-dot span {
-      width: 12px;
-      height: 12px;
-      margin: 5px;
-      background: #ddd !important;
-      border-radius: 50%;
-    }
-
-    .owl-dot.active span {
-      background:rgb(255, 185, 226) !important;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-
-    h2 {
-      color: white;
-      margin: 0;
-      font-size: 28px;
-      font-weight: bold;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-      100% {
-        transform: translateY(0);
-      }
-    }
-
-    .nav-link {
-      position: relative;
-      transition: all 0.3s ease-in-out;
-    }
-
-    .nav-link:hover {
-      background: linear-gradient(to right,rgb(184, 209, 255),rgb(255, 195, 215));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color:rgb(255, 79, 164);
-      transition: color 0.2s ease-in-out;
-      border: 2px solidrgb(255, 169, 210);
-      border-radius: 5px;
-      padding: 5px;
-    }
-
-    .nav-link:active {
-      transform: scale(1.1);
-      color: #FF99CB;
-    }
-  </style>
+<style>
+  body { font-family: 'Poppins', sans-serif; }
+  a { color: rgb(255, 129, 160); }
+  a:hover { color: rgb(255, 129, 160); }
+  h2 { font-size: 2.5rem; }
+  footer { border-top: 3px solid rgb(255, 152, 178); }
+</style>
 
 <!-- Owl Carousel JavaScript -->
  <!-- Owl Carousel CSS -->
