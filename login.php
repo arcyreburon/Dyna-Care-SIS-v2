@@ -203,7 +203,7 @@ unset($_SESSION['error']);
             <h2 style="font-weight: 800;">HEALTH SOLUTION</h2>
         </div>
         <div class="right">
-            <h2 style="letter-spacing: 2px; font-weight: 800;">LOGIN</h2>
+            <h2 style="font-weight: 1000    ;">LOGIN</h2>
             <div class="pt-4 pb-2">
                 <?php if (!empty($error)): ?>
                     <div class="alert"><?php echo htmlspecialchars($error); ?></div>
@@ -213,7 +213,7 @@ unset($_SESSION['error']);
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <span class="show-password"><input type="checkbox" onclick="togglePassword()"> Show Password</span>
-                <button type="submit" style="margin-top: 20px; letter-spacing: 2px; font-weight: 600;">LOGIN</button>
+                <button type="submit" style="margin-top: 20px; font-weight: 600;">LOGIN</button>
             </form>
         </div>
     </div>

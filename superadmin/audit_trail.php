@@ -1,4 +1,4 @@
-<title>Sales Transactions</title>
+<title>Sales Transactions.</title>
 <?php
 session_start();
 include "../db_conn.php";

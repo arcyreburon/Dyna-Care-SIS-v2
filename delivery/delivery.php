@@ -204,11 +204,11 @@ include '../includes/footer.php';
                             <script>
                                 document.addEventListener("DOMContentLoaded", function () {
                                     const dataTable = new simpleDatatables.DataTable("#myTable", {
-                                        perPage: 15,
-                                        perPageSelect: [10, 15, 25, 50, 100],
+                                        perPage: 5,
+                                        perPageSelect: [5, 10, 15, 25, 50, 100],
                                         labels: {
                                             placeholder: "Search deliveries...",
-                                            perPage: "{select} per page",
+                                            perPage: "Select per page",
                                             noRows: "No matching records found",
                                             info: "Showing {start} to {end} of {rows} items"
                                         },

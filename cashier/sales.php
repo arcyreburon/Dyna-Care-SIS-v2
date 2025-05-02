@@ -185,7 +185,7 @@ include '../includes/footer.php';
 
                             <form method="POST" id="order-form">
                             <div class="form-group row">
-        <label for="transaction-id" class="col-form-label col-sm-4" style="margin-right: -100;"><strong>Transaction No.:</strong></label>
+        <label for="transaction-id" class="col-form-label col-sm-4" style="margin-right: -50;"><strong>Transaction No.:</strong></label>
         <div class="col-sm-8">
             <span class="form-control-plaintext font-weight-bold" id="transaction-id-display"></span>
             <input type="hidden" id="hidden-transaction-id" name="transaction_no">
@@ -259,8 +259,6 @@ include '../includes/footer.php';
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <script>

@@ -51,96 +51,152 @@ include '../includes/sidebar.php';
 include '../includes/footer.php';
 ?>
 
+<style>
+    /* Minimal table styling */
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    
+    .report-table th {
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: 500;
+        background-color: #f8f9fa;
+    }
+    
+    .report-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .report-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Minimal card styling */
+    .report-card {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .card-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    /* Minimal button styling */
+    .btn {
+        padding: 0.375rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+    
+    /* Filter controls */
+    .filter-control {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .filter-select {
+        flex: 1;
+        max-width: 200px;
+    }
+</style>
+
 <main id="main" class="main">
-    <section class="dashboard section">
-        <div class="container">
-            <div class="justify-content-center row">
-                <div class="col-lg-12">
-                    <div class="shadow-sm card">
-                        <div class="text-black card-header">
-                            <h3 class="mb-0">Re-Order Lists</h3>
-                        </div>
-                        <div class="card-body">
-                        <div class="table-responsive">
-   
-                        <div class="mt-3 col-md-4">
-                            <form method="GET" action="" class="d-flex">
-                                <select name="type_filter" class="form-select" onchange="this.form.submit()">
-                                    <option value="">All Types</option>
-                                    <option value="medicine" <?php echo (isset($_GET['type_filter']) && $_GET['type_filter'] == 'medicine') ? 'selected' : ''; ?>>Medicine</option>
-                                    <option value="supplies" <?php echo (isset($_GET['type_filter']) && $_GET['type_filter'] == 'supplies') ? 'selected' : ''; ?>>Supplies</option>
-                                </select>
-                            </form>
-                        </div>
+    <div class="container py-3">
+        <div class="report-card">
+            <div class="card-header">
+                <h3>Re-Order Lists</h3>
+            </div>
+            
+            <div class="p-3">
+                <div class="filter-control">
+                    <form method="GET" action="" class="d-flex gap-2">
+                        <select name="type_filter" class="form-select filter-select" onchange="this.form.submit()">
+                            <option value="">All Types</option>
+                            <option value="medicine" <?php echo (isset($_GET['type_filter']) && $_GET['type_filter'] == 'medicine') ? 'selected' : ''; ?>>Medicine</option>
+                            <option value="supplies" <?php echo (isset($_GET['type_filter']) && $_GET['type_filter'] == 'supplies') ? 'selected' : ''; ?>>Supplies</option>
+                        </select>
+                        <button type="button" onclick="exportToExcel()" class="btn btn-primary">Export to Excel</button>
+                    </form>
+                </div>
 
-                        <button type="button" onclick="exportToExcel()" class="btn btn-success" style="margin-left: 10px;">Export to Excel</button>
-                            
+                <div class="table-responsive">
+                    <table id="myTable" class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Type</th>
+                                <th>Recipient Email</th>
+                                <th>Order Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Include database connection
+                            include "../db_conn.php";
 
-                            <!-- Table displaying the orders data -->
-                            <table id="myTable" class="custom-table table-bordered table table-hover table-striped">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th class="text-center">Product Name</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-center">Type</th>
-                                        <th class="text-center">Recipient Email</th>
-                                        <th class="text-center">Order Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    // Include database connection
-                                    include "../db_conn.php";
+                            // Handle type filter
+                            $typeFilter = isset($_GET['type_filter']) ? $_GET['type_filter'] : '';
 
-                                    // Handle type filter
-                                    $typeFilter = isset($_GET['type_filter']) ? $_GET['type_filter'] : '';
+                            // SQL query to fetch data from orders table with type filter
+                            $sql = "SELECT * FROM orders";
+                            if (!empty($typeFilter)) {
+                                $sql .= " WHERE type = ?";
+                            }
 
-                                    // SQL query to fetch data from orders table with type filter
-                                    $sql = "SELECT * FROM orders";
-                                    if (!empty($typeFilter)) {
-                                        $sql .= " WHERE type = ?";
-                                    }
+                            $stmt = $con->prepare($sql);
+                            if (!empty($typeFilter)) {
+                                $stmt->bind_param("s", $typeFilter);
+                            }
+                            $stmt->execute();
+                            $result = $stmt->get_result();
 
-                                    $stmt = $con->prepare($sql);
-                                    if (!empty($typeFilter)) {
-                                        $stmt->bind_param("s", $typeFilter);
-                                    }
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $type = ucfirst($row['type']); // Capitalize the first letter of the type
+                                    echo "<tr>
+                                        <td>" . htmlspecialchars($row['product_name']) . "</td>
+                                        <td>" . $row['quantity'] . "</td>
+                                        <td>" . htmlspecialchars($type) . "</td>
+                                        <td>" . htmlspecialchars($row['recipient_email']) . "</td>
+                                        <td>" . $row['order_date'] . "</td>
+                                    </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5' class='text-center py-3'>No orders found</td></tr>";
+                            }
 
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            $type = ucfirst($row['type']); // Capitalize the first letter of the type
-                                            echo "<tr>
-                                            <td class='text-center'>" . htmlspecialchars($row['product_name']) . "</td>
-                                            <td class='text-center'>" . $row['quantity'] . "</td>
-                                            <td class='text-center'>" . htmlspecialchars($type) . "</td>
-                                            <td class='text-center'>" . htmlspecialchars($row['recipient_email']) . "</td>
-                                            <td class='text-center'>" . $row['order_date'] . "</td>
-                                        </tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='5' class='text-center'>No orders found</td></tr>";
-                                    }
-
-                                    $stmt->close();
-                                    $con->close();
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </section>
+                            $stmt->close();
+                            $con->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <!-- DataTable Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        new simpleDatatables.DataTable("#myTable");
+        new simpleDatatables.DataTable("#myTable", {
+            perPage: 10,
+            labels: {
+                placeholder: "Search...",
+                perPage: "{select} entries per page",
+                noRows: "No entries found",
+                info: "Showing {start} to {end} of {rows} entries"
+            }
+        });
     });
 </script>
 
@@ -164,26 +220,3 @@ include '../includes/footer.php';
         saveAs(new Blob([wbout], { type: "application/octet-stream" }), "Reports.xlsx");
     }
 </script>
-<!-- Custom CSS for Table Borders -->
-<style>
-    .custom-table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    .custom-table th,
-    .custom-table td {
-        border: 1px solid #dee2e6 !important;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .custom-table thead th {
-        background-color: rgb(168, 168, 168);
-        color: white;
-    }
-
-    .custom-table tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-</style>

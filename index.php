@@ -194,20 +194,37 @@
           </div>
         </div>
       </div>
+
       <!-- Text Content Section -->
-      <div class="col-lg-6 col-md-6 col-sm-12" style="padding-top: 18rem; padding-right: 10rem; text-align: right;">
-        <div class="align-self-center order-lg-2 mx-auto">
-          <div class="site-block-cover-content text-center" style="position: relative; z-index: 1;">
-            <h1 style="text-align: right; font-family: 'Poppins'; font-weight:900; font-style: normal; font-size: 80px; color:black;">DynaCareSIS</h1>
-            <h1 style="text-align: right; font-family: 'Poppins'; font-weight:700; font-style: normal; font-size: 50px; white-space: nowrap; color: black; margin-top: -30px;">Health Solutions</h1>
-            <h2 class="sub-title" style="text-transform: none; text-align: right; align-item: right; font-family: 'Poppins'; font-weight:400; font-style: normal; font-size: 22px; letter-spacing: 307; white-space: nowrap; color: black;margin-top: -30px; text-align: right;">Effective Medicine, New Medicine Everyday</h2>
+      <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="right-text order-lg-2 mx-auto">
+          <div class="site-block-cover-content" style="position: relative; z-index: 1; text-align: right;">
+            <h1 style="font-family: 'Poppins'; font-weight:900; font-style: normal; font-size: 80px; color:black; margin-left: auto;">DynaCareSIS</h1>
+            <h1 style="font-family: 'Poppins'; font-weight:700; font-style: normal; font-size: 50px; white-space: nowrap; color: black; margin-top: -30px; margin-left: auto;">Health Solutions</h1>
+            <h2 class="sub-title" style="text-transform: none; font-family: 'Poppins'; font-weight:400; font-style: normal; font-size: 22px; letter-spacing: 307; white-space: nowrap; color: black; margin-top: -30px; margin-left: auto;">Effective Medicine, New Medicine Everyday</h2>
             <p style="text-align: right;">
               <br>
-              <a href="login.php" class="mt-3 px-5 py-3 btn btn-primary custom-button" style="font-weight: 700; border-radius:50px; text-align: right; !important">LOGIN</a>
+              <a href="login.php" class="mt-3 px-5 py-3 btn btn-primary custom-button" style="font-weight: 700; border-radius:50px; display: inline-block; margin-left: auto;">LOGIN</a>
             </p>
           </div>
         </div>
       </div>
+
+      <style>
+        .right-text {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          height: 500px;
+          padding-top: 20rem;
+          padding-right: 5rem;
+        }
+        
+        .site-block-cover-content {
+          max-width: 100%;
+        }
+      </style>
+
     </div>
   </div>
 </div>

@@ -51,102 +51,163 @@ include '../includes/sidebar.php';
 include '../includes/footer.php';
 ?>
 
+<style>
+    /* Minimal table styling */
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    
+    .report-table th {
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: 500;
+        background-color: #f8f9fa;
+    }
+    
+    .report-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .report-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Minimal card styling */
+    .report-card {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .card-header {
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    /* Minimal button styling */
+    .btn {
+        padding: 0.375rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+    
+    /* Filter controls */
+    .filter-control {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .filter-select {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .filter-label {
+        margin-bottom: 0.25rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+</style>
+
 <main id="main" class="main">
-    <section class="dashboard section">
-        <div class="container">
-            <div class="justify-content-center row">
-                <div class="col-lg-12">
-                    <div class="shadow-sm card">
-                        <div class="text-black card-header">
-                            <h3 class="mb-0">Reports List</h3>
+    <div class="container py-3">
+        <div class="report-card">
+            <div class="card-header">
+                <h3>Reports List</h3>
+            </div>
+            
+            <div class="p-3">
+                <div class="filter-control">
+                    <form method="GET" action="" class="d-flex gap-3 flex-wrap">
+                        <div>
+                            <div class="filter-label">Branch</div>
+                            <select class="form-select filter-select" id="branch_id" name="branch_id" onchange="this.form.submit()">
+                                <option value="">All Branches</option>
+                                <?php foreach ($branches as $branch): ?>
+                                    <option value="<?php echo $branch['id']; ?>" <?php if ($selectedBranch == $branch['id']) echo 'selected'; ?>>
+                                        <?php echo htmlspecialchars($branch['branch_name']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <!-- Dropdown filters for branches and categories -->
-                                <div class="col-lg-12 row">
-                                    <form method="GET" action="" class="d-flex">
-
-                                        <!-- Branch filter -->
-                                        <div class="mt-3 mb-3 col-md-4 me-3">
-                                            <label for="branch_id" class="form-label">Branch</label>
-                                            <select class="form-select" id="branch_id" name="branch_id"
-                                                onchange="this.form.submit()">
-                                                <option value="">All Branches</option>
-                                                <?php foreach ($branches as $branch): ?>
-                                                    <option value="<?php echo $branch['id']; ?>" <?php if ($selectedBranch == $branch['id'])
-                                                           echo 'selected'; ?>>
-                                                        <?php echo htmlspecialchars($branch['branch_name']); ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-
-                                        <!-- Category filter -->
-                                        <div class="mt-3 mb-3 col-md-4">
-                                            <label for="category_id" class="form-label">Category</label>
-                                            <select class="form-select" id="category_id" name="category_id"
-                                                onchange="this.form.submit()">
-                                                <option value="">All Categories</option>
-                                                <?php foreach ($categories as $category): ?>
-                                                    <option value="<?php echo $category['id']; ?>" <?php if ($selectedCategory == $category['id'])
-                                                           echo 'selected'; ?>>
-                                                        <?php echo htmlspecialchars($category['category_name']); ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                                <button onclick="exportToExcel()" class="btn btn-success"
-                                    style="margin-bottom: 10px;">Export to Excel</button>
-                                <!-- Table displaying the inventory data -->
-                                <table id="myTable" class="custom-table table-bordered table table-hover table-striped">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th class="text-center">Branch</th>
-                                            <th class="text-center">Brand</th>
-                                            <th class="text-center">Product Name</th>
-                                            <th class="text-center">Category</th>
-                                            <th class="text-center">Available Stock</th>
-                                            <th class="text-center">Damaged Stock</th>
-                                            <th class="text-center">Expiration Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo "<tr>
-                                <td class='text-center'>" . htmlspecialchars($row['branch_name']) . "</td>
-                                <td class='text-center'>" . htmlspecialchars($row['brand']) . "</td>
-                                <td class='text-center'>" . htmlspecialchars($row['product_name']) . "</td>
-                                <td class='text-center'>" . htmlspecialchars($row['category_name']) . "</td>
-                                <td class='text-center'>" . $row['avail_stock'] . "</td>
-                                <td class='text-center'>" . $row['damage_stock'] . "</td>
-                                <td class='text-center'>" . $row['expiration_date'] . "</td>
-                            </tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='6' class='text-center'>No inventory records found</td></tr>";
-                                        }
-
-                                        $con->close();
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                        
+                        <div>
+                            <div class="filter-label">Category</div>
+                            <select class="form-select filter-select" id="category_id" name="category_id" onchange="this.form.submit()">
+                                <option value="">All Categories</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value="<?php echo $category['id']; ?>" <?php if ($selectedCategory == $category['id']) echo 'selected'; ?>>
+                                        <?php echo htmlspecialchars($category['category_name']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </section>
+                        
+                        <div class="d-flex align-items-end">
+                            <button onclick="exportToExcel()" class="btn btn-primary">Export to Excel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="myTable" class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Branch</th>
+                                <th>Brand</th>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Available</th>
+                                <th>Damaged</th>
+                                <th>Expiration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>
+                                        <td>" . htmlspecialchars($row['branch_name']) . "</td>
+                                        <td>" . htmlspecialchars($row['brand']) . "</td>
+                                        <td>" . htmlspecialchars($row['product_name']) . "</td>
+                                        <td>" . htmlspecialchars($row['category_name']) . "</td>
+                                        <td>" . $row['avail_stock'] . "</td>
+                                        <td>" . $row['damage_stock'] . "</td>
+                                        <td>" . $row['expiration_date'] . "</td>
+                                    </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='7' class='text-center py-3'>No inventory records found</td></tr>";
+                            }
+
+                            $con->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <!-- DataTable Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        new simpleDatatables.DataTable("#myTable");
+        new simpleDatatables.DataTable("#myTable", {
+            perPage: 10,
+            labels: {
+                placeholder: "Search...",
+                perPage: "{select} entries per page",
+                noRows: "No entries found",
+                info: "Showing {start} to {end} of {rows} entries"
+            }
+        });
     });
 </script>
 
@@ -170,26 +231,3 @@ include '../includes/footer.php';
         saveAs(new Blob([wbout], { type: "application/octet-stream" }), "Reports.xlsx");
     }
 </script>
-<!-- Custom CSS for Table Borders -->
-<style>
-    .custom-table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    .custom-table th,
-    .custom-table td {
-        border: 1px solid #dee2e6 !important;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .custom-table thead th {
-        background-color: rgb(168, 168, 168);
-        color: white;
-    }
-
-    .custom-table tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-</style>
