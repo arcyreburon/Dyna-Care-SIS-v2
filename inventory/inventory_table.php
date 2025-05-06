@@ -199,17 +199,19 @@ include '../includes/footer.php';
                                                         " . ($row['brand'] ? "<br><small class='text-muted'>" . htmlspecialchars($row['brand']) . "</small>" : "") . "
                                                     </td>
                                                     <td>" . htmlspecialchars($row['category_name']) . "</td>
-                                                    <td>
+                                                    <td style='text-align: right;'>
                                                         <strong>₱" . number_format($row['price'], 2) . "</strong>
                                                         " . ($row['old_price'] && $row['old_price'] != $row['price'] ? 
-                                                            "<br><small class='text-muted text-decoration-line-through'>₱" . number_format($row['old_price'], 2) . "</small>" : "") . "
+                                                            "<br><small class='text-muted text-decoration-line-through'>₱" . number_format($row['old_price'], 2) . "</small>" 
+                                                            : "") . "
                                                     </td>
                                                     <td>
                                                         <span class='badge bg-" . ($row['avail_stock'] > 10 ? 'success' : ($row['avail_stock'] > 0 ? 'warning' : 'danger')) . "'>
                                                             " . $row['avail_stock'] . "
                                                         </span>
                                                         " . ($row['damage_stock'] > 0 ? 
-                                                            "<br><small class='text-danger'>Damaged: " . $row['damage_stock'] . "</small>" : "") . "
+                                                            "<br><small class='text-danger'>Damaged: " . $row['damage_stock'] . "</small>" 
+                                                            : "") . "
                                                     </td>
                                                     <td class='medicine-column'>" . ($row['expiration_date'] ?? '-') . "</td>
                                                     <td class='medicine-column'>" . ($row['batch'] ?? '-') . "</td>
@@ -225,6 +227,7 @@ include '../includes/footer.php';
                                                         </div>
                                                     </td>
                                                 </tr>";
+
                                             }
                                         } else {
                                             echo "<tr><td colspan='9' class='text-center py-4 text-muted'>No inventory records found</td></tr>";

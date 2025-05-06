@@ -72,18 +72,6 @@ include '../includes/footer.php';
                         <div class="card-body">
                             <form method="GET" action="" class="col-md-12 row">
                                 <div class="mt-3 mb-3 col-md-4">
-                                    <label for="branchFilter" class="form-label">Filter by Branch</label>
-                                    <select id="branchFilter" name="branch_id" class="form-select" onchange="this.form.submit()">
-                                        <option value="">Select Branch</option>
-                                        <?php while ($branch = $result_branches->fetch_assoc()): ?>
-                                            <option value="<?php echo $branch['id']; ?>" <?php echo ($branch_id == $branch['id']) ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($branch['branch_name']); ?>
-                                            </option>
-                                        <?php endwhile; ?>
-                                    </select>
-                                </div>
-
-                                <div class="mt-3 mb-3 col-md-4">
                                     <label for="categoryFilter" class="form-label">Filter by Category</label>
                                     <select id="categoryFilter" name="category_id" class="form-select" onchange="this.form.submit()">
                                         <option value="">Select Category</option>
@@ -121,7 +109,7 @@ include '../includes/footer.php';
                                                         <strong><?php echo htmlspecialchars($row['product_name']); ?></strong>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($row['category_name']); ?></td>
-                                                    <td>₱<?php echo number_format($row['price'], 2); ?></td>
+                                                    <td style="text-align: right;">₱<?php echo number_format($row['price'], 2); ?></td>
                                                     <td><span class="badge bg-light text-dark"><?php echo $row['batch']; ?></span></td>
                                                     <td><small><?php echo date('M d, Y', strtotime($row['received'])); ?></small></td>
                                                     <td>
@@ -260,3 +248,4 @@ include '../includes/footer.php';
         background-color: #f8f9fa;
     }
 </style>
+

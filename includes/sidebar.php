@@ -23,7 +23,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-grid"></i>
         <span>Dashboard</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
       </a>
     </li>
 
@@ -35,7 +34,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-boxes"></i>
         <span>Products</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
       </a>
     </li>
 
@@ -47,7 +45,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-box-seam"></i>
         <span>Inventory</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
       </a>
     </li>
 
@@ -59,7 +56,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-archive"></i>
         <span>Archive</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Inventory Only</span><?php endif; ?>
       </a>
     </li>
 
@@ -71,7 +67,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-truck"></i>
         <span>Delivery</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
       </a>
     </li>
 
@@ -83,7 +78,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-bar-chart-line"></i>
         <span>Sales Report</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Cashier Only</span><?php endif; ?>
       </a>
     </li>
 
@@ -95,7 +89,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-receipt"></i>
         <span>Sales Invoice</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Cashier Only</span><?php endif; ?>
       </a>
     </li>
 
@@ -107,7 +100,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-cash-stack"></i>
         <span>Transaction</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Cashier Only</span><?php endif; ?>
       </a>
     </li>
 
@@ -121,7 +113,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-bar-chart-line"></i>
         <span>Reports</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Admin Only</span><?php endif; ?>
         <i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="reports-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
@@ -152,7 +143,6 @@ function hasAccess($requiredRoles, $userRole) {
          <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
         <i class="bi bi-gear"></i>
         <span>Settings</span>
-        <?php if (!$hasAccess): ?><span class="no-access-badge">Admin Only</span><?php endif; ?>
         <i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="settings-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
@@ -208,19 +198,6 @@ function hasAccess($requiredRoles, $userRole) {
   color: #adb5bd !important;
 }
 
-/* Smaller Badges */
-.no-access-badge {
-  position: absolute;
-  right: 10px;
-  background-color: #e9ecef;
-  color: #6c757d;
-  padding: 1px 6px;
-  border-radius: 10px;
-  font-size: 0.6rem;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
 /* Active State */
 .nav-link.active {
   background-color: #e9ecef !important;
@@ -248,15 +225,13 @@ function hasAccess($requiredRoles, $userRole) {
   .sidebar {
     width: 80px;
   }
-  .sidebar .nav-link span, 
-  .sidebar .no-access-badge {
+  .sidebar .nav-link span {
     display: none;
   }
   .sidebar:hover {
     width: var(--sidebar-width);
   }
-  .sidebar:hover .nav-link span,
-  .sidebar:hover .no-access-badge {
+  .sidebar:hover .nav-link span {
     display: inline-block;
   }
 }

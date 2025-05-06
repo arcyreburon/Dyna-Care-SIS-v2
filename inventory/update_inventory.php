@@ -204,6 +204,9 @@ include '../includes/footer.php';
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Update Inventory</h5>
+                            <span class="text-danger">* Indicates required question</span>
+                            <br>
+                            <br>
 
                             <!-- Display alert message -->
                             <?php if (isset($_SESSION['message'])): ?>
@@ -253,12 +256,7 @@ include '../includes/footer.php';
                                     <input type="text" class="form-control" id="deliveryPrice" name="delivery_price" value="<?= $delivery ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" required>
                                 </div>
                                 
-                                <!-- Brand and Delivery Date -->
-                                <div class="mb-3 col-md-6">
-                                    <label for="brand" class="form-label">Brand/Manufacturer <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="brand" name="brand" value="<?= $brand ?>" required>
-                                </div>
-
+                                <!-- Delivery Date -->
                                 <div class="mb-3 col-md-6">
                                     <label for="received" class="form-label">Delivery Date <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="received" name="received" value="<?= $received ?>" required>
@@ -323,13 +321,18 @@ include '../includes/footer.php';
 
                                 <div class="mb-3 col-md-6 medicine-field">
                                     <label for="batch" class="form-label">Batch No. / Lot No.</label>
-                                    <input type="text" class="form-control" id="batch" name="batch" value="<?= $batch ?>">
+                                    <input type="text" class="form-control" id="batch" name="batch" value="<?= $batch ?>" required>
                                 </div>
 
                                 <!-- Supply-specific Fields -->
                                 <div class="mb-3 col-md-6 supply-field" style="display: none;">
                                     <label for="model_number" class="form-label">Model/Part Number</label>
                                     <input type="text" class="form-control" id="model_number" name="model_number" value="<?= $model_number ?? '' ?>">
+                                </div>
+
+                                <div class="mb-3 col-md-6 supply-field" style="display: none;">
+                                    <label for="batch" class="form-label">Batch No. / Lot No.</label>
+                                    <input type="text" class="form-control" id="batch" name="batch" value="<?= $batch ?>">
                                 </div>
 
                                 <div class="mb-3 col-md-6 supply-field" style="display: none;">

@@ -109,40 +109,10 @@ try {
             
             echo json_encode(['totalSales' => (float)$totalSales]);
             break;
-
-        // Add this case to your switch statement in dashboard_data.php
-        case 'sales_by_branch_period':
-            $branchId = intval($_GET['branch_id']);
-            $period = $_GET['period'] ?? 'all';
             
-            $sql = "SELECT DATE(date) AS sale_date, 
-                        SUM(total_price - (total_price * (discount / 100))) AS total_sales 
-                    FROM transaction t
-                    INNER JOIN products p ON t.products_id = p.id
-                    WHERE p.branches_id = $branchId AND ";
-            
-            switch ($period) {
-                case 'today': $sql .= "DATE(t.date) = CURDATE()"; break;
-                case 'week': $sql .= "YEARWEEK(t.date, 1) = YEARWEEK(CURDATE(), 1)"; break;
-                case 'month': $sql .= "YEAR(t.date) = YEAR(CURDATE()) AND MONTH(t.date) = MONTH(CURDATE())"; break;
-                case 'year': $sql .= "YEAR(t.date) = YEAR(CURDATE())"; break;
-                default: $sql .= "1=1";
-            }
-            
-            $sql .= " GROUP BY sale_date ORDER BY sale_date";
-            
-            $result = $con->query($sql);
-            $data = ['labels' => [], 'values' => []];
-            while ($row = $result->fetch_assoc()) {
-                $data['labels'][] = $row['sale_date'];
-                $data['values'][] = (float)$row['total_sales'];
-            }
-            echo json_encode($data);
-            break;
-                    
-                default:
-                    echo json_encode(['error' => 'Invalid action']);
-            }
+        default:
+            echo json_encode(['error' => 'Invalid action']);
+    }
     
 } catch (Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);
@@ -151,4 +121,4 @@ try {
         $con->close();
     }
 }
-?>  
+?>

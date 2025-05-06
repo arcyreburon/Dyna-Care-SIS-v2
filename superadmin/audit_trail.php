@@ -198,7 +198,7 @@ include '../includes/sidebar.php';
                                                         <span class="text-muted">None</span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td class="price-cell">₱<?= number_format($final_price, 2) ?></td>
+                                                <td style="text-align: right;" class="price-cell">₱<?= number_format($final_price, 2) ?></td>
                                                 <td><?= date('M d, Y h:i A', strtotime($row['date'])) ?></td>
                                                 <td><?= htmlspecialchars($row['branch_name']) ?></td>
                                             </tr>
@@ -232,7 +232,7 @@ include '../includes/sidebar.php';
             perPageSelect: [10, 15, 25, 50, 100],
             labels: {
                 placeholder: "Search transactions...",
-                perPage: "{select} per page",
+                perPage: " per page",
                 noRows: "No matching records found",
                 info: "Showing {start} to {end} of {rows} transactions"
             }

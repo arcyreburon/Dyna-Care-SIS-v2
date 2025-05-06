@@ -189,7 +189,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] : '';
                                                         <span class="text-muted">None</span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td class="price-cell">₱<?= number_format($final_price, 2) ?></td>
+                                                <td style="text-align: right;" class="price-cell">₱<?= number_format($final_price, 2) ?></td>
                                                 <td><?= date('M d, Y h:i A', strtotime($row['date'])) ?></td>
                                             </tr>
                                     <?php

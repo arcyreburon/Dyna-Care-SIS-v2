@@ -2,136 +2,100 @@
 session_start();
 include "../db_conn.php";
 
-if (!isset($_SESSION['user_role'])) {
-    header("Location: ../index.php");
-    exit;
-}
-
-if ($_SESSION['user_role'] !== "Inventory Clerk" && $_SESSION['user_role'] !== "Super Admin" && $_SESSION['user_role'] !== "Admin") {
+if (!isset($_SESSION['user_role']) || 
+    ($_SESSION['user_role'] !== "Inventory Clerk" && 
+     $_SESSION['user_role'] !== "Super Admin" && 
+     $_SESSION['user_role'] !== "Admin")) {
     header("Location: ../403.php");
     exit;
 }
 
-// Initialize all variables with default values
-$productId = isset($_GET['id']) ? $_GET['id'] : null;
-$productName = $availStock = $damageStock = $expirationDate = $categoryId = $batch = $supplier = "";
-$oldPrice = $brand = $dosage = $delivery_date = $received = $delivery_man = $contact_number = "";
-$price = $delivery = $quantity = 0;
-$categories = [];
+// Initialize variables
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$delivery = [];
+
+// Fetch delivery details
+if ($id) {
+    $sql = "SELECT d.*, c.category_name 
+            FROM delivery d
+            LEFT JOIN categories c ON d.categories_id = c.id
+            WHERE d.id = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $delivery = $result->fetch_assoc();
+    $stmt->close();
+    
+    if (!$delivery) {
+        $_SESSION['message'] = "Delivery record not found";
+        $_SESSION['message_type'] = "danger";
+        header("Location: delivery.php");
+        exit;
+    }
+}
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $productId) {
-    $productName = $_POST['product_name'] ?? '';
-    $price = $_POST['price'] ?? 0;
-    $delivery = $_POST['delivery_price'] ?? 0;
-    $quantity = $_POST['quantity'] ?? 0;
-    $availStock = $_POST['avail_stock'] ?? 0;
-    $damageStock = $_POST['damage_stock'] ?? 0;
-    $expirationDate = $_POST['expiration_date'] ?? '';
-    $categoryId = $_POST['category_id'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id) {
+    $product_name = $_POST['product_name'] ?? '';
+    $price = floatval($_POST['price'] ?? 0);
     $batch = $_POST['batch'] ?? '';
-    $supplier = $_POST['supplier'] ?? '';
-    $oldPrice = $_POST['old_price'] ?? 0;
-    $brand = $_POST['brand'] ?? '';
-    $dosage = $_POST['dosage'] ?? '';
     $received = $_POST['received'] ?? '';
+    $expiration_date = $_POST['expiration_date'] ?? '';
+    $supplier = $_POST['supplier'] ?? '';
     $delivery_man = $_POST['delivery_man'] ?? '';
     $contact_number = $_POST['contact_number'] ?? '';
+    $category_id = intval($_POST['category_id'] ?? 0);
 
-    $sql = "UPDATE inventory i
-            INNER JOIN products p ON i.products_id = p.id
-            INNER JOIN others o ON p.id = o.products_id
-            SET i.avail_stock = ?, i.price = ?, i.delivery_price = ?, i.damage_stock = ?, 
-                p.product_name = ?, p.expiration_date = ?, p.categories_id = ?, 
-                o.batch = ?, o.supplier = ?, o.old_price = ?, o.brand = ?, o.dosage = ?,
-                o.received = ?, o.delivery_man = ?, o.contact_number = ?
-            WHERE i.id = ?";
+    $sql = "UPDATE delivery SET
+            product_name = ?,
+            price = ?,
+            batch = ?,
+            received = ?,
+            expiration_date = ?,
+            supplier = ?,
+            delivery_man = ?,
+            contact_number = ?,
+            categories_id = ?
+            WHERE id = ?";
 
     $stmt = $con->prepare($sql);
-
     if ($stmt) {
-        $stmt->bind_param("ididssisssdsssssi", 
-            $availStock, 
-            $price, 
-            $delivery, 
-            $damageStock, 
-            $productName, 
-            $expirationDate, 
-            $categoryId, 
-            $batch, 
-            $supplier, 
-            $oldPrice, 
-            $brand, 
-            $dosage,
+        $stmt->bind_param("sdssssssii", 
+            $product_name,
+            $price,
+            $batch,
             $received,
+            $expiration_date,
+            $supplier,
             $delivery_man,
             $contact_number,
-            $productId
+            $category_id,
+            $id
         );
-        $stmt->execute();
-
-        if ($stmt->affected_rows > 0) {
-            $_SESSION['message'] = "Inventory updated successfully.";
+        
+        if ($stmt->execute()) {
+            $_SESSION['message'] = "Delivery updated successfully";
             $_SESSION['message_type'] = "success";
-            header("Location: inventory_table.php");
+            header("Location: delivery.php");
             exit;
         } else {
-            $_SESSION['message'] = "Update failed or no changes were made.";
-            $_SESSION['message_type'] = "warning";
+            $_SESSION['message'] = "Error updating delivery: " . $con->error;
+            $_SESSION['message_type'] = "danger";
         }
         $stmt->close();
     } else {
-        $_SESSION['message'] = "Failed to prepare SQL statement.";
+        $_SESSION['message'] = "Database error: " . $con->error;
         $_SESSION['message_type'] = "danger";
     }
 }
 
-// Fetch product details
-if ($productId) {
-    $sql = "SELECT i.id, i.avail_stock, i.price, i.delivery_price, i.damage_stock, 
-                   p.product_name, p.expiration_date, p.categories_id, 
-                   o.batch, o.supplier, o.old_price, o.brand, o.dosage, 
-                   o.received, o.delivery_man, o.contact_number
-            FROM inventory i
-            INNER JOIN products p ON i.products_id = p.id
-            INNER JOIN categories c ON p.categories_id = c.id
-            INNER JOIN others o ON p.id = o.products_id
-            WHERE i.id = ?";
-
-    $stmt = $con->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("i", $productId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $productName = $row['product_name'];
-            $availStock = $row['avail_stock'];
-            $damageStock = $row['damage_stock'];
-            $expirationDate = $row['expiration_date'];
-            $categoryId = $row['categories_id'];
-            $batch = $row['batch'];
-            $supplier = $row['supplier'];
-            $price = $row['price'];
-            $delivery = $row['delivery_price'];
-            $oldPrice = $row['old_price'];
-            $brand = $row['brand'];
-            $dosage = $row['dosage'];
-            $received = $row['received'];
-            $delivery_man = $row['delivery_man'];
-            $contact_number = $row['contact_number'];
-        }
-        $stmt->close();
-    }
-}
-
-// Fetch categories
-$sqlCategories = "SELECT id, category_name FROM categories";
-$resultCategories = $con->query($sqlCategories);
-
-if ($resultCategories->num_rows > 0) {
-    while ($row = $resultCategories->fetch_assoc()) {
+// Fetch categories for dropdown
+$categories = [];
+$sql_categories = "SELECT id, category_name FROM categories";
+$result_categories = $con->query($sql_categories);
+if ($result_categories) {
+    while ($row = $result_categories->fetch_assoc()) {
         $categories[] = $row;
     }
 }
@@ -148,7 +112,7 @@ include '../includes/sidebar.php';
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Update Inventory</h5>
+                            <h5 class="card-title">Update Delivery</h5>
 
                             <?php if (isset($_SESSION['message'])): ?>
                                 <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show" role="alert">
@@ -158,19 +122,21 @@ include '../includes/sidebar.php';
                                 <?php unset($_SESSION['message']); unset($_SESSION['message_type']); ?>
                             <?php endif; ?>
 
-                            <form class="g-3 needs-validation row" method="POST" action="update_inventory.php?id=<?= $productId ?>">
+                            <form class="g-3 needs-validation row" method="POST" action="update.php?id=<?= $id ?>">
 
                                 <div class="col-md-6">
-                                    <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="productName" name="product_name" value="<?= htmlspecialchars($productName) ?>" required>
+                                    <label for="product_name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="product_name" name="product_name" 
+                                           value="<?= htmlspecialchars($delivery['product_name'] ?? '') ?>" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="category" name="category_id" required>
-                                        <option value="" disabled>Select Category</option>
+                                    <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="category_id" name="category_id" required>
+                                        <option value="">Select Category</option>
                                         <?php foreach ($categories as $category): ?>
-                                            <option value="<?= $category['id'] ?>" <?= ($category['id'] == $categoryId) ? 'selected' : ''; ?>>
+                                            <option value="<?= $category['id'] ?>" 
+                                                <?= ($category['id'] == ($delivery['categories_id'] ?? 0)) ? 'selected' : '' ?>>
                                                 <?= htmlspecialchars($category['category_name']) ?>
                                             </option>
                                         <?php endforeach; ?>
@@ -178,53 +144,51 @@ include '../includes/sidebar.php';
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="price" class="form-label">Price<span class="text-danger">*</span></label>
-                                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="<?= $price ?>" required>
+                                    <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" class="form-control" id="price" name="price" 
+                                           value="<?= htmlspecialchars($delivery['price'] ?? 0) ?>" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="quantity" class="form-label">Quantity<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="quantity" name="quantity" value="<?= $availStock ?>" required>
+                                    <label for="batch" class="form-label">Batch Number <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="batch" name="batch" 
+                                           value="<?= htmlspecialchars($delivery['batch'] ?? '') ?>" required>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="brand" class="form-label">Brand <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="brand" name="brand" value="<?= $brand ?>" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
+                                <div class="col-md-6">
                                     <label for="received" class="form-label">Delivery Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="received" name="received" value="<?= $received ?>" required>
+                                    <input type="date" class="form-control" id="received" name="received" 
+                                           value="<?= htmlspecialchars($delivery['received'] ?? '') ?>" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="expiration_date" class="form-label">Expiration Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="expiration_date" name="expiration_date" value="<?= htmlspecialchars($expirationDate) ?>" required>
+                                    <label for="expiration_date" class="form-label">Expiration Date</label>
+                                    <input type="date" class="form-control" id="expiration_date" name="expiration_date" 
+                                           value="<?= htmlspecialchars($delivery['expiration_date'] ?? '') ?>">
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="batch" class="form-label">Batch <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="batch" name="batch" value="<?= $batch ?>" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
+                                <div class="col-md-6">
                                     <label for="supplier" class="form-label">Supplier <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="supplier" name="supplier" value="<?= htmlspecialchars($supplier) ?>" required>
+                                    <input type="text" class="form-control" id="supplier" name="supplier" 
+                                           value="<?= htmlspecialchars($delivery['supplier'] ?? '') ?>" required>
                                 </div>
-                                
-                                <div class="mb-3 col-md-6">
+
+                                <div class="col-md-6">
                                     <label for="delivery_man" class="form-label">Delivery Man <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="delivery_man" name="delivery_man" value="<?= $delivery_man ?>" required>
+                                    <input type="text" class="form-control" id="delivery_man" name="delivery_man" 
+                                           value="<?= htmlspecialchars($delivery['delivery_man'] ?? '') ?>" required>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="contact_number" class="form-label">Contact Number <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="contact_number" name="contact_number" value="<?= htmlspecialchars($contact_number) ?>" maxlength="11" oninput="formatPhoneNumber(this)" required>
+                                <div class="col-md-6">
+                                    <label for="contact_number" class="form-label">Contact Number</label>
+                                    <input type="text" class="form-control" id="contact_number" name="contact_number" 
+                                           value="<?= htmlspecialchars($delivery['contact_number'] ?? '') ?>" 
+                                           maxlength="11" oninput="formatPhoneNumber(this)">
                                 </div>
 
-                                <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">Update Inventory</button>
-                                    <a href="inventory_table.php" class="btn btn-danger">Cancel</a>
+                                <div class="col-12 mt-3">
+                                    <button class="btn btn-primary" type="submit">Update Delivery</button>
+                                    <a href="delivery.php" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                         </div>

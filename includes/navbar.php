@@ -17,7 +17,7 @@
         <ul class="d-flex align-items-center">
 
             <li class="d-block d-lg-none nav-item">
-                <a class="search-bar-toggle nav-icon nav-link" href="#">
+                <a class="search-bar-toggle nav-icon nav-link" href="#" style="margin-right: 0px; padding-left: 17px; padding-right: 0px;">
                     <i class="bi bi-search"></i>
                 </a>
             </li><!-- End Search Icon-->

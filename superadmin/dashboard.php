@@ -128,6 +128,21 @@ include '../includes/sidebar.php';
                     </div>
                 </div>
 
+                <style>
+
+                #salesDropdown {
+                    text-decoration: none;  /* Removes underline */
+                    background: none;  /* Removes background arrow */
+                    border: none;  /* Removes border arrow */
+                    padding-right: 0;  /* Adjust padding if necessary */
+                }
+
+                .dropdown-toggle::after {
+                    display: none; /* Hides the arrow */
+                }
+
+                </style>
+
                 <!-- Products Card -->
                 <div class="mb-4 col-lg-4 col-md-6">
                     <div class="card" id="productsCard">

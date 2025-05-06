@@ -130,184 +130,273 @@
     include '../includes/sidebar.php';
     ?>
 
-    <main id="main" class="main">
-        <div class="container-fluid">
-            <!-- Alerts Section -->
-            <?php if (isset($_SESSION['success_message'])): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <?php echo $_SESSION['success_message']; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php unset($_SESSION['success_message']); ?>
-            <?php elseif (isset($_SESSION['error_message'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <?php echo $_SESSION['error_message']; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php unset($_SESSION['error_message']); ?>
-            <?php endif; ?>
-            
-            <div class="row">
-                <!-- Products Column -->
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="mb-0"><i class="bi bi-box-seam me-2"></i>Available Products</h4>
-                            <a href="../cashier/reorder_form.php" class="btn btn-outline-light">
-                                <i class="bi bi-plus-circle me-1"></i> Re-Order
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="products-table" class="custom-table table">
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Category</th>
-                                            <th>Stock</th>
-                                            <th>Price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $sql = "SELECT p.id, p.product_name, i.price, c.category_name, i.avail_stock
-                                                FROM products p
-                                                INNER JOIN categories c ON p.categories_id = c.id
-                                                INNER JOIN inventory i ON p.id = i.products_id
-                                                WHERE p.branches_id = ?";
+<main id="main" class="main">
+    <div class="container-fluid">
+        <!-- Alerts Section -->
+        <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <?php echo $_SESSION['success_message']; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['success_message']); ?>
+        <?php elseif (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <?php echo $_SESSION['error_message']; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
+        
+        <div class="row">
+            <!-- Products Column -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="bi bi-box-seam me-2"></i>Available Products</h4>
+                        <a href="../cashier/reorder_form.php" class="btn btn-outline-light">
+                            <i class="bi bi-plus-circle me-1"></i> Re-Order
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="products-table" class="custom-table table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT p.id, p.product_name, i.price, c.category_name, i.avail_stock
+                                            FROM products p
+                                            INNER JOIN categories c ON p.categories_id = c.id
+                                            INNER JOIN inventory i ON p.id = i.products_id
+                                            WHERE p.branches_id = ?";
+                                    
+                                    $stmt = $con->prepare($sql);
+                                    $stmt->bind_param("i", $_SESSION['branches_id']);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    
+                                    while ($row = $result->fetch_assoc()) {
+                                        $disabled = ($row["avail_stock"] == 0) ? "disabled" : "";
+                                        $stockClass = ($row["avail_stock"] == 0) ? "badge-danger" : 
+                                                     ($row["avail_stock"] < 10 ? "badge-warning" : "badge-success");
                                         
-                                        $stmt = $con->prepare($sql);
-                                        $stmt->bind_param("i", $_SESSION['branches_id']);
-                                        $stmt->execute();
-                                        $result = $stmt->get_result();
-                                        
-                                        while ($row = $result->fetch_assoc()) {
-                                            $disabled = ($row["avail_stock"] == 0) ? "disabled" : "";
-                                            $stockClass = ($row["avail_stock"] == 0) ? "badge-danger" : 
-                                                         ($row["avail_stock"] < 10 ? "badge-warning" : "badge-success");
-                                            
-                                            echo "<tr data-id='{$row["id"]}' data-name='{$row["product_name"]}' 
-                                                  data-category='{$row["category_name"]}' data-stock='{$row["avail_stock"]}' 
-                                                  data-price='{$row["price"]}'>";
-                                            echo "<td>{$row["product_name"]}</td>";
-                                            echo "<td>{$row["category_name"]}</td>";
-                                            echo "<td><span class='badge $stockClass'>{$row["avail_stock"]}</span></td>";
-                                            echo "<td>₱" . number_format($row["price"], 2) . "</td>";
-                                            echo "<td>
-                                                  <button class='add-to-cart btn btn-sm btn-primary' data-id='{$row["id"]}' $disabled>
-                                                  <i class='bi bi-cart-plus'></i> Add</button></td>";
-                                            echo "</tr>";
-                                        }
-                                        $stmt->close();
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        echo "<tr data-id='{$row["id"]}' data-name='{$row["product_name"]}' 
+                                              data-category='{$row["category_name"]}' data-stock='{$row["avail_stock"]}' 
+                                              data-price='{$row["price"]}'>";
+                                        echo "<td>{$row["product_name"]}</td>";
+                                        echo "<td>{$row["category_name"]}</td>";
+                                        echo "<td><span class='badge $stockClass'>{$row["avail_stock"]}</span></td>";
+                                        echo "<td>₱" . number_format($row["price"], 2) . "</td>";
+                                        echo "<td>
+                                              <button class='add-to-cart btn btn-sm btn-primary' data-id='{$row["id"]}' $disabled>
+                                              <i class='bi bi-cart-plus'></i> Add</button></td>";
+                                        echo "</tr>";
+                                    }
+                                    $stmt->close();
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Order Column -->
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="bi bi-receipt me-2"></i>Customer Order</h4>
+            <!-- Order Column -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="bi bi-receipt me-2"></i>Customer Order</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" id="order-form">
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label fw-bold">Transaction No.</label>
+                                <div class="col-sm-8">
+                                    <span class="form-control-plaintext fw-bold text-primary" id="transaction-id-display"></span>
+                                    <input type="hidden" id="hidden-transaction-id" name="transaction_no">
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive mb-3">
+                                <table class="custom-table table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cart-items">
+                                    <tr>
+                                            <td>Product Name</td>
+                                            <td>
+                                                <input type="number" class="quantity" value="1" min="1">
+                                            </td>
+                                            <td>₱100.00</td>
+                                            <td>₱100.00</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger remove-item">Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="total-display">
+                                <div class="row mb-2">
+                                    <div class="col-6 text-muted">Subtotal:</div>
+                                    <div class="col-6 text-end fw-bold">₱<span id="subtotal">0.00</span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-6 text-muted">Discount:</div>
+                                    <div class="col-6 text-end fw-bold">-₱<span id="discount-amount">0.00</span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-6 text-muted">VAT (12%):</div>
+                                    <div class="col-6 text-end fw-bold">₱<span id="vat-amount">0.00</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 h5">Grand Total:</div>
+                                    <div class="col-6 text-end h4 text-primary fw-bold">₱<span id="grand-total">0.00</span></div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Discount Type</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" id="discount" name="discount">
+                                        <option value="0">0%</option>
+                                        <option value="20">20%</option>
+                                        <option value="40">40%</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Cash Tendered</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" class="form-control" id="cashTendered" name="cash_tendered" min="0" step="0.01" placeholder="0.00">
+                                    </div>
+                                    <small class="text-danger d-none" id="insufficient-balance">
+                                        <i class="bi bi-exclamation-circle"></i> Insufficient amount
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <label class="col-sm-4 col-form-label">Change Due</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="text" class="form-control bg-light" id="change" value="0.00" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-primary me-md-2" id="print-receipt" disabled>
+                                    <i class="bi bi-printer me-1"></i>Print Receipt
+                                </button>
+                                <button type="button" class="btn btn-success" id="process-order" disabled>
+                                    <i class="bi bi-check-circle me-1"></i>Process Order
+                                </button>
+                            </div>
+                            
+                            <input type="hidden" name="cart" id="cart-data">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Receipt Modal -->
+        <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title"><i class="bi bi-receipt me-2"></i>Order Receipt</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="receipt-content" class="receipt">
+                            <div class="text-center mb-3">
+                                <h4 class="mb-0">DynaCare: Medical Trading</h4>
+                                <small><?php echo $_SESSION['branch_name']; ?></small>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <small>Transaction #: <span id="receipt-transaction-no"></span></small>
+                                    <small>Date: <?php echo date('m/d/Y'); ?></small>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small>Cashier: <?php echo $_SESSION['name']; ?></small>
+                                    <small>Time: <?php echo date('h:i A'); ?></small>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <table class="table table-sm mb-2">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Price</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="receipt-items">
+                                    <!-- Receipt items will appear here -->
+                                </tbody>
+                            </table>
+                            
+                            <div class="border-top pt-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>Subtotal:</span>
+                                    <span>₱<span id="receipt-subtotal">0.00</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Discount:</span>
+                                    <span>-₱<span id="receipt-discount">0.00</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>VAT (12%):</span>
+                                    <span>₱<span id="receipt-vat">0.00</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <span>Grand Total:</span>
+                                    <span>₱<span id="receipt-total">0.00</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Cash Tendered:</span>
+                                    <span>₱<span id="receipt-cash">0.00</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <span>Change:</span>
+                                    <span>₱<span id="receipt-change">0.00</span></span>
+                                </div>
+                            </div>
+                            <hr>
                         </div>
-                        <div class="card-body">
-                            <form method="POST" id="order-form">
-                                <div class="row mb-3">
-                                    <label class="col-sm-4 col-form-label fw-bold">Transaction No.</label>
-                                    <div class="col-sm-8">
-                                        <span class="form-control-plaintext fw-bold text-primary" id="transaction-id-display"></span>
-                                        <input type="hidden" id="hidden-transaction-id" name="transaction_no">
-                                    </div>
-                                </div>
-                                
-                                <div class="table-responsive mb-3">
-                                    <table class="custom-table table">
-                                        <thead>
-                                            <tr>
-                                                <th>Item</th>
-                                                <th>Qty</th>
-                                                <th>Price</th>
-                                                <th>Total</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="cart-items">
-                                            <!-- Cart items will appear here -->
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div class="total-display">
-                                    <div class="row mb-2">
-                                        <div class="col-6 text-muted">Subtotal:</div>
-                                        <div class="col-6 text-end fw-bold">₱<span id="subtotal">0.00</span></div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col-6 text-muted">Discount:</div>
-                                        <div class="col-6 text-end fw-bold">-₱<span id="discount-amount">0.00</span></div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col-6 text-muted">VAT (12%):</div>
-                                        <div class="col-6 text-end fw-bold">₱<span id="vat-amount">0.00</span></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6 h5">Grand Total:</div>
-                                        <div class="col-6 text-end h4 text-primary fw-bold">₱<span id="grand-total">0.00</span></div>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label class="col-sm-4 col-form-label">Discount Type</label>
-                                    <div class="col-sm-8">
-                                        <select class="form-select" id="discount" name="discount">
-                                            <option value="0">0%</option>
-                                            <option value="20">20%</option>
-                                            <option value="40">40%</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label class="col-sm-4 col-form-label">Cash Tendered</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <span class="input-group-text">₱</span>
-                                            <input type="number" class="form-control" id="cashTendered" name="cash_tendered" min="0" step="0.01" placeholder="0.00">
-                                        </div>
-                                        <small class="text-danger d-none" id="insufficient-balance">
-                                            <i class="bi bi-exclamation-circle"></i> Insufficient amount
-                                        </small>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-4">
-                                    <label class="col-sm-4 col-form-label">Change Due</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <span class="input-group-text">₱</span>
-                                            <input type="text" class="form-control bg-light" id="change" value="0.00" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-primary me-md-2" id="print-receipt" disabled>
-                                        <i class="bi bi-printer me-1"></i>Print Receipt
-                                    </button>
-                                    <button type="button" class="btn btn-success" id="process-order" disabled>
-                                        <i class="bi bi-check-circle me-1"></i>Process Order
-                                    </button>
-                                </div>
-                                
-                                <input type="hidden" name="cart" id="cart-data">
-                            </form>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i>Close
+                        </button>
+                        <button type="button" class="btn btn-primary" id="print-receipt-btn">
+                            <i class="bi bi-printer me-1"></i>Print
+                        </button>
                     </div>
                 </div>
             </div>
@@ -350,6 +439,98 @@
             </div>
         </div>
     </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Print Receipt Button Click Handler
+        document.getElementById('print-receipt').addEventListener('click', function() {
+            // Get all cart items
+            const cartItems = document.querySelectorAll('#cart-items tr');
+            const receiptItems = document.getElementById('receipt-items');
+            
+            // Clear previous items
+            receiptItems.innerHTML = '';
+            
+            // Only proceed if there are items in cart
+            if (cartItems.length > 0 && !cartItems[0].querySelector('td').colSpan) {
+                // Populate receipt items
+                cartItems.forEach(item => {
+                    const name = item.querySelector('td:nth-child(1)').textContent;
+                    const qty = item.querySelector('input.quantity').value;
+                    const price = item.querySelector('td:nth-child(3)').textContent.replace('₱', '');
+                    const total = item.querySelector('td:nth-child(4)').textContent.replace('₱', '');
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${name}</td>
+                        <td class="text-end">${qty}</td>
+                        <td class="text-end">₱${parseFloat(price).toFixed(2)}</td>
+                        <td class="text-end">₱${parseFloat(total).toFixed(2)}</td>
+                    `;
+                    receiptItems.appendChild(row);
+                });
+            }
+            
+            // Update receipt totals
+            document.getElementById('receipt-transaction-no').textContent = 
+                document.getElementById('transaction-id-display').textContent;
+            document.getElementById('receipt-subtotal').textContent = 
+                document.getElementById('subtotal').textContent;
+            document.getElementById('receipt-discount').textContent = 
+                document.getElementById('discount-amount').textContent;
+            document.getElementById('receipt-vat').textContent = 
+                document.getElementById('vat-amount').textContent;
+            document.getElementById('receipt-total').textContent = 
+                document.getElementById('grand-total').textContent;
+            document.getElementById('receipt-cash').textContent = 
+                document.getElementById('cashTendered').value || '0.00';
+            document.getElementById('receipt-change').textContent = 
+                document.getElementById('change').value || '0.00';
+            
+            // Show receipt modal
+            new bootstrap.Modal(document.getElementById('receiptModal')).show();
+        });
+
+        // Print Button in Modal Click Handler
+        document.getElementById('print-receipt-btn').addEventListener('click', function() {
+            // Create a print-friendly version
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Receipt</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; font-size: 12px; padding: 10px; }
+                        .receipt { width: 100%; max-width: 300px; margin: 0 auto; }
+                        .text-center { text-align: center; }
+                        .text-end { text-align: right; }
+                        table { width: 100%; border-collapse: collapse; margin: 5px 0; }
+                        th, td { padding: 3px 0; }
+                        hr { border-top: 1px dashed #000; margin: 5px 0; }
+                        .fw-bold { font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    ${document.getElementById('receipt-content').innerHTML}
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 100);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank', 'width=600,height=600');
+            printWindow.document.open();
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+        });
+    });
+    </script>
 
     <?php include '../includes/footer.php'; ?>
 
@@ -659,12 +840,6 @@
         document.getElementById('confirm-process').addEventListener('click', function() {
             document.getElementById('cart-data').value = JSON.stringify(cartItems);
             document.getElementById('order-form').submit();
-        });
-        
-        // Print receipt button
-        document.getElementById('print-receipt').addEventListener('click', function() {
-            // This would be implemented with a proper receipt printing solution
-            alert('Receipt printing functionality would be implemented here');
         });
         
         // Event listeners for financial updates
