@@ -21,6 +21,73 @@
   <link rel="stylesheet" href="pharma/css/owl.carousel.min.css">
   <link rel="stylesheet" href="pharma/css/owl.theme.default.min.css">
 
+  <!-- Favicon -->
+  <link href="assets/img/dynaa.png" rel="icon" class="rounded" alt="Rounded Image">
+<!-- Fonts  -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Flowbite CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              300: '#fda4af',
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+            },
+            secondary: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            },
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .gradient-text {
+      background: linear-gradient(90deg, #f43f5e, #fb7185);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .team-member:hover .team-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+
 
   <link rel="stylesheet" href="pharma/css/aos.css">
 
@@ -49,13 +116,13 @@
           <a href="#home" class="px-3 text-dark nav-link" style="letter-spacing: 5px; font-size: 18px; font-weight: 500; !important">HOME</a>
         </li>
         <li class="nav-item">
-          <a href="#products" class="px-3 text-dark nav-link" style="letter-spacing: 5px; font-size: 18px; font-weight: 500; !important">PRODUCTS</a>
-        </li>
-        <li class="nav-item">
           <a href="#about" class="px-3 text-dark nav-link" style="letter-spacing: 5px; font-size: 18px; font-weight: 500; !important">ABOUT US</a>
         </li>
         <li class="nav-item">
           <a href="#contact" class="px-3 text-dark nav-link" style="letter-spacing: 5px; font-size: 18px; font-weight: 500; !important">CONTACT</a>
+        </li>
+        <li class="nav-item">
+          <a href="login.php" class="px-3 text-dark nav-link" style="letter-spacing: 5px; font-size: 18px; font-weight: 500; !important">LOGIN</a>
         </li>
       </ul>
     </div>
@@ -203,9 +270,6 @@
             <h1 style="font-family: 'Poppins'; font-weight:700; font-style: normal; font-size: 50px; white-space: nowrap; color: black; margin-top: -30px; margin-left: auto;">Health Solutions</h1>
             <h2 class="sub-title" style="text-transform: none; font-family: 'Poppins'; font-weight:400; font-style: normal; font-size: 22px; letter-spacing: 307; white-space: nowrap; color: black; margin-top: -30px; margin-left: auto;">Effective Medicine, New Medicine Everyday</h2>
             <p style="text-align: right;">
-              <br>
-              <a href="login.php" class="mt-3 px-5 py-3 btn btn-primary custom-button" style="font-weight: 700; border-radius:50px; display: inline-block; margin-left: auto;">LOGIN</a>
-            </p>
           </div>
         </div>
       </div>
@@ -340,90 +404,326 @@
 <div class="bg-light py-5 site-section">
   <div class="container">
 
-<!-- About Us -->
-<section id="about" class="container py-5">
-  <h2 class="text-center mb-5">ABOUT US</h2>
-  <div class="row">
-    <div class="col-md-6 mb-4">
-      <h3>Who We Are</h3>
-      <p>
-        We are a leading company dedicated to providing high-quality products and services. 
-        With years of industry experience, we focus on innovation, customer satisfaction, 
-        and sustainable growth.
-      </p>
-    </div>
-    <div class="col-md-6">
-      <h3>Our Mission</h3>
-      <p>
-        Our mission is to create solutions that make life easier and businesses more efficient. 
-        We believe in building strong relationships with our clients, founded on trust and reliability.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- Contact -->
-<section id="contact" class="bg-light py-5">
-  <div class="container">
-    <h2 class="text-center mb-5">CONTACT US</h2>
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <h5>Our Address</h5>
-        <p>17.650069, 120.414504, Santo Domingo, Ilocos Sur</p>
+<!-- Redesigned About Section -->
+<section id="about" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <span class="text-primary-500 font-semibold">WHO WE ARE</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">About <span class="gradient-text">DynaCareSIS</span></h2>
+        <div class="w-20 h-1 bg-primary-500 mx-auto mt-4"></div>
       </div>
-      <div class="col-md-4 mb-4">
-        <h5>Email Us</h5>
-        <p><a href="mailto:dynacare.sis@gmail.com">dynacare.sis@gmail.com</a></p>
+      
+      <!-- About Content -->
+      <div class="flex flex-col lg:flex-row items-center gap-12 mb-20">
+        <div class="lg:w-1/2">
+          <div class="relative rounded-xl overflow-hidden shadow-lg">
+            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Our Team" class="w-full h-auto">
+            <div class="absolute inset-0 bg-primary-500 opacity-20"></div>
+          </div>
+        </div>
+        <div class="lg:w-1/2">
+          <h3 class="text-3xl font-bold text-gray-900 mb-4">Our Story</h3>
+          <p class="text-gray-600 mb-6">
+            Founded in 2025, DynaCareSIS has been at the forefront of pharmaceutical innovation, delivering high-quality healthcare solutions to communities across the region. What started as a small local pharmacy has grown into a trusted name in healthcare.
+          </p>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1">
+                <div class="flex items-center justify-center h-8 w-8 rounded-full bg-primary-100 text-primary-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-3">
+                <p class="text-gray-600">Committed to excellence in pharmaceutical care and patient health</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1">
+                <div class="flex items-center justify-center h-8 w-8 rounded-full bg-primary-100 text-primary-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-3">
+                <p class="text-gray-600">Innovative solutions for modern healthcare challenges</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1">
+                <div class="flex items-center justify-center h-8 w-8 rounded-full bg-primary-100 text-primary-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-3">
+                <p class="text-gray-600">Trusted by healthcare professionals and patients alike</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <h5>Call Us</h5>
-        <p><a href="tel:+9193686141">+919 368 6141</a></p>
+      
+      <!-- Mission and Vision -->
+      <div class="grid md:grid-cols-2 gap-8 mb-20">
+        <div class="bg-primary-50 p-8 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+          <div class="flex items-center mb-4">
+            <div class="bg-primary-100 p-3 rounded-full mr-4">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">Our Mission</h3>
+          </div>
+          <p class="text-gray-600">
+            To provide accessible, high-quality pharmaceutical products and healthcare solutions that improve lives. We are committed to innovation, integrity, and excellence in everything we do.
+          </p>
+        </div>
+        <div class="bg-primary-50 p-8 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+          <div class="flex items-center mb-4">
+            <div class="bg-primary-100 p-3 rounded-full mr-4">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">Our Vision</h3>
+          </div>
+          <p class="text-gray-600">
+            To be the leading healthcare solutions provider in the region, recognized for our commitment to quality, innovation, and patient care. We envision a healthier future for all communities we serve.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Stats -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        <div class="stat-card bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300">
+          <div class="text-4xl font-bold text-primary-600 mb-2">50+</div>
+          <div class="text-gray-600">Healthcare Products</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300">
+          <div class="text-4xl font-bold text-primary-600 mb-2">10K+</div>
+          <div class="text-gray-600">Satisfied Customers</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300">
+          <div class="text-4xl font-bold text-primary-600 mb-2">15+</div>
+          <div class="text-gray-600">Years of Experience</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-all duration-300">
+          <div class="text-4xl font-bold text-primary-600 mb-2">24/7</div>
+          <div class="text-gray-600">Customer Support</div>
+        </div>
+      </div>
+      
+      <!-- Team Section -->
+      <div class="text-center mb-12">
+        <h3 class="text-3xl font-bold text-gray-900">Meet Our <span class="gradient-text">Leadership Team</span></h3>
+        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Our dedicated team of healthcare professionals is committed to your well-being</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="team-member relative group">
+          <div class="relative rounded-xl overflow-hidden">
+            <img src="https://i.ibb.co/XxFSsdwF/owner.jpg" alt="Team Member" class="w-full h-64 object-cover">
+            <div class="team-overlay absolute inset-0 bg-primary-600 bg-opacity-80 flex flex-col justify-end p-6 opacity-0 transform translate-y-4 transition-all duration-300">
+              <h4 class="text-white font-bold text-xl">Nelia Villoria</h4>
+              <p class="text-primary-100">Owner of Dyna Care Medical Trading</p>
+              <p class="text-white mt-2 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </div>
+          </div>
+        </div>
+        <div class="team-member relative group">
+          <div class="relative rounded-xl overflow-hidden">
+            <img src="https://i.ibb.co/pvdjwKv9/494687773-1918053765612775-1183976506540027343-n.jpg" alt="Team Member" class="w-full h-64 object-cover">
+            <div class="team-overlay absolute inset-0 bg-primary-600 bg-opacity-80 flex flex-col justify-end p-6 opacity-0 transform translate-y-4 transition-all duration-300">
+              <h4 class="text-white font-bold text-xl">Jawyna Tine Palpalatoc</h4>
+              <p class="text-primary-100">Manager</p>
+              <p class="text-white mt-2 text-sm">Pharmacy Graduate and Board Passer, Dyna Care Medical Trading Manager, and currently studying as pilot</p>
+            </div>
+          </div>
+        </div>
+        <div class="team-member relative group">
+          <div class="relative rounded-xl overflow-hidden">
+            <img src="https://i.ibb.co/8gnYmnNg/494821002-712635941109313-4329778390210694307-n.jpg" alt="Team Member" class="w-full h-64 object-cover">
+            <div class="team-overlay absolute inset-0 bg-primary-600 bg-opacity-80 flex flex-col justify-end p-6 opacity-0 transform translate-y-4 transition-all duration-300">
+              <h4 class="text-white font-bold text-xl">Jacfil Austrin Palpalatoc</h4>
+              <p class="text-primary-100">Manager of Jacfil Pharmacy</p>
+              <p class="text-white mt-2 text-sm">CEO of Argonautix Solution, Owner of La-Nuvola Vape Lounge</p>
+            </div>
+          </div>
+        </div>
+        <div class="team-member relative group">
+          <div class="relative rounded-xl overflow-hidden">
+            <img src="https://i.ibb.co/RpgKppLW/messages-3.jpg" alt="Team Member" class="w-full h-64 object-cover">
+            <div class="team-overlay absolute inset-0 bg-primary-600 bg-opacity-80 flex flex-col justify-end p-6 opacity-0 transform translate-y-4 transition-all duration-300">
+              <h4 class="text-white font-bold text-xl">Reburon</h4>
+              <p class="text-primary-100">Lorem</p>
+              <p class="text-white mt-2 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="bg-dark text-white py-4 text-center">
-  <p>&copy; DynaCareSIS System 2025. All Rights Reserved.</p>
-  <p class="small text-muted">Designed by Arcy Mae Christian S. Reburon</p>
-</footer>
+  <!-- Values Section -->
+  <section class="py-16 bg-primary-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <span class="text-primary-500 font-semibold">OUR CORE VALUES</span>
+        <h2 class="text-4xl font-bold text-gray-900 mt-2">What We Stand For</h2>
+        <div class="w-20 h-1 bg-primary-500 mx-auto mt-4"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+          <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Integrity</h3>
+          <p class="text-gray-600">We uphold the highest ethical standards in all our operations and interactions.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+          <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Innovation</h3>
+          <p class="text-gray-600">We continuously seek new ways to improve healthcare delivery and outcomes.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+          <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Community</h3>
+          <p class="text-gray-600">We are committed to serving and improving the health of our communities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<style>
-  body { font-family: 'Poppins', sans-serif; }
-  a { color: rgb(255, 129, 160); }
-  a:hover { color: rgb(255, 129, 160); }
-  h2 { font-size: 2.5rem; }
-  footer { border-top: 3px solid rgb(255, 152, 178); }
-</style>
+  <!-- Testimonials -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <span class="text-primary-500 font-semibold">TESTIMONIALS</span>
+        <h2 class="text-4xl font-bold text-gray-900 mt-2">What Our Customers Say</h2>
+        <div class="w-20 h-1 bg-primary-500 mx-auto mt-4"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-gray-50 p-6 rounded-xl">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold text-gray-900">Maria Garcia</h4>
+              <div class="flex text-yellow-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic">"The team at DynaCareSIS provided exceptional care when I needed it most. Their knowledge and compassion made all the difference in my recovery."</p>
+        </div>
+        
+        <div class="bg-gray-50 p-6 rounded-xl">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold text-gray-900">James Cabalayan</h4>
+              <div class="flex text-yellow-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic">"I've been a customer for years and always receive personalized attention. Their staff goes above and beyond to ensure I get the right medications."</p>
+        </div>
+        
+        <div class="bg-gray-50 p-6 rounded-xl">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold text-gray-900">Gloria Pagayatan</h4>
+              <div class="flex text-yellow-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic">"As a physician, I trust DynaCareSIS for my patients' pharmaceutical needs. Their quality control and service are unmatched in the industry."</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<!-- Owl Carousel JavaScript -->
- <!-- Owl Carousel CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+  <!-- Contact Section (kept your existing contact section) -->
+  
+  <br>
+  <br>
+  <br>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<script>
-  $(document).ready(function(){
-    $(".medicine-carousel, .supplies-carousel").owlCarousel({
-      loop: true,
-      margin: 20,
-      dots: true,
-      autoplay: true,
-      autoplayTimeout: 2500, // Speed: Change slides every 2.5 seconds
-      autoplayHoverPause: false, // Keeps moving even when hovered
-      responsive: {
-        0: { items: 1 },
-        600: { items: 2 },
-        1000: { items: 3 }
-      }
+  <!-- Footer -->
+  <footer style="color: black;">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center">
+            <img src="assets/img/dynaa.png" alt="Logo" class="w-10 h-10 rounded-full mr-3">
+            <span class="text-xl font-bold">DynaCareSIS</span>
+          </div>
+          <p style="color: black;" class="mt-2 text-gray-400">Effective Medicine, New Medicine Everyday</p>
+        </div>
+        <div style="color: black;" class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"></path></svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg>
+          </a>
+        </div>
+      </div>
+      <div style="color: black;" class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 DynaCareSIS System. All rights reserved.</p>
+        <p class="mt-1 text-sm">Designed by Arcy Mae Christian S. Reburon</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
     });
-  });
-</script>
-
+  </script>
 </body>
-
 </html>
 
 <!-- <div class="row">

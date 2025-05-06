@@ -134,7 +134,7 @@ include '../includes/footer.php';
 
                                 <!-- Batch -->
                                 <div class="mb-3 col-md-6">
-                                    <label for="batch" class="form-label">Batch No. / Lot  No.<span class="text-danger">*</span></label>
+                                    <label for="batch" class="form-label">Batch No. / Lot  No.<span></span></label>
                                     <input type="text" class="form-control" id="batch" name="batch">
                                 </div>
 
