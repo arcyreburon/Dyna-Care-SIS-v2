@@ -1,125 +1,170 @@
-<title>DynaCareSIS - sales</title>
-<?php
-session_start();
-include "../db_conn.php";
-
-// Restrict access to Cashiers only
-if ($_SESSION['user_role'] !== "Cashier") {
-    header("Location: ../403.php");
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ensure transaction_no is set
-    if (!isset($_POST['transaction_no']) || empty($_POST['transaction_no'])) {
-        die("Error: Transaction number is missing.");
-    }
-
-    $transaction_no = intval($_POST['transaction_no']);
-    $cart = json_decode($_POST['cart'], true);
-    $discount = floatval($_POST['discount']);
-    $order_processed = true; // Flag to check if the order was processed
-
-
-    foreach ($cart as $item) {
-        if (!isset($item['id']) || !isset($item['quantity'])) {
-            die("Error: Invalid cart data.");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DynaCareSIS - Sales</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4bb543;
+            --danger: #f72585;
+            --warning: #ffc107;
         }
-
-        $product_id = intval($item['id']);
-        $quantity = intval($item['quantity']);
-        $total_price = floatval($item['unitPrice']) * $quantity;
-
-        // Check current stock
-        $check_stock_query = "SELECT avail_stock FROM inventory WHERE products_id = ?";
-        $stmt = $con->prepare($check_stock_query);
-        $stmt->bind_param("i", $product_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-
-        if ($row) {
-            $current_stock = $row['avail_stock'];
-            $new_stock = $current_stock - $quantity;
-
-            if ($current_stock >= $quantity) {
-                // Update inventory
-                $update_stock_query = "UPDATE inventory SET avail_stock = ? WHERE products_id = ?";
-                $update_stmt = $con->prepare($update_stock_query);
-                $update_stmt->bind_param("ii", $new_stock, $product_id);
-
-                if (!$update_stmt->execute()) {
-                    die("Error updating stock: " . $update_stmt->error);
-                }
-
-                // Insert transaction
-                $insert_transaction_query = "INSERT INTO transaction (products_id, total_price, discount, transaction_no) VALUES (?, ?, ?, ?)";
-                $insert_stmt = $con->prepare($insert_transaction_query);
-                $insert_stmt->bind_param("idii", $product_id, $total_price, $discount, $transaction_no);
-
-                if (!$insert_stmt->execute()) {
-                    die("Error inserting transaction: " . $insert_stmt->error);
-                }
-            } else {
-                echo "Not enough stock for product ID: $product_id<br>";
-                $order_processed = false; // If any product doesn't have enough stock, the order fails
-            }
-        } else {
-            echo "No inventory found for product ID: $product_id<br>";
-            $order_processed = false; // If inventory not found, the order fails
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+        }
+        
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .custom-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        
+        .custom-table thead th {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            border: none;
+        }
+        
+        .custom-table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .btn {
+            border-radius: 6px;
+            font-weight: 500;
+            padding: 8px 16px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 5px 8px;
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+        }
+        
+        .badge-danger {
+            background-color: var(--danger);
+        }
+        
+        .badge-warning {
+            background-color: var(--warning);
+            color: #212529;
+        }
+        
+        .quantity-control {
+            width: 120px;
+        }
+        
+        .alert {
+            border-radius: 8px;
+        }
+        
+        .total-display {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <?php
+    session_start();
+    include "../db_conn.php";
+    
+    if ($_SESSION['user_role'] !== "Cashier") {
+        header("Location: ../403.php");
+        exit;
     }
+    
+    include '../includes/header.php';
+    include '../includes/navbar.php';
+    include '../includes/sidebar.php';
+    ?>
 
-    // If the order was processed successfully
-    if ($order_processed) {
-        $_SESSION['success_message'] = 'Order processed successfully!';
-    } else {
-        $_SESSION['error_message'] = 'Order could not be completed due to insufficient stock or inventory issues.';
-    }
-
-    header("Location: sales.php");
-    exit;
-}
-
-include '../includes/header.php';
-include '../includes/navbar.php';
-include '../includes/sidebar.php';
-include '../includes/footer.php';
-?>
-
-
-<main id="main" class="main">
-    <section class="dashboard section">
-        <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert alert-dismissible alert-success fade show" role="alert">
-            <?php echo $_SESSION['success_message']; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <?php unset($_SESSION['success_message']); ?>
-        <?php elseif (isset($_SESSION['error_message'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['error_message']; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <?php unset($_SESSION['error_message']); ?>
-        <?php endif; ?>
+    <main id="main" class="main">
         <div class="container-fluid">
+            <!-- Alerts Section -->
+            <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <?php echo $_SESSION['success_message']; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['success_message']); ?>
+            <?php elseif (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <?php echo $_SESSION['error_message']; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['error_message']); ?>
+            <?php endif; ?>
+            
             <div class="row">
-                <div class="col-md-6">
+                <!-- Products Column -->
+                <div class="col-lg-6">
                     <div class="card">
-                    <div class="d-flex align-items-center justify-content-between card-header">
-                        <h4>Products</h4>
-                        <a href="../cashier/reorder_form.php" class="btn btn-primary">
-                            <i class="bi bi-plus-circle-fill"></i> Re-Order
-                        </a>
-                    </div>
-
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0"><i class="bi bi-box-seam me-2"></i>Available Products</h4>
+                            <a href="../cashier/reorder_form.php" class="btn btn-outline-light">
+                                <i class="bi bi-plus-circle me-1"></i> Re-Order
+                            </a>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="myTable" class="custom-table table table-bordered table-hover table-striped">
+                                <table id="products-table" class="custom-table table">
                                     <thead>
                                         <tr>
-                                            <th>Product Name</th>
+                                            <th>Product</th>
                                             <th>Category</th>
                                             <th>Stock</th>
                                             <th>Price</th>
@@ -128,45 +173,36 @@ include '../includes/footer.php';
                                     </thead>
                                     <tbody>
                                         <?php
-                // Fetch products with category names and inventory details from the database
-                if (isset($_SESSION['branches_id'])) {
-                    $branches_id = $_SESSION['branches_id']; // Get branch_id from session
-                }
-                $sql = "
-                SELECT p.id, p.product_name, i.price, c.category_name, i.avail_stock
-                FROM products p
-                INNER JOIN categories c ON p.categories_id = c.id
-                INNER JOIN inventory i ON p.id = i.products_id
-                WHERE p.branches_id = ?";  // Filter by branch_id
-
-                // Prepare and execute the query
-                $stmt = $con->prepare($sql);
-                $stmt->bind_param("i", $branches_id); // Bind the branch_id parameter
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    // Loop through the fetched data and display it in the table
-                    while ($row = $result->fetch_assoc()) {
-                        // Check if the avail_stock is zero
-                        $disabled = ($row["avail_stock"] == 0) ? "disabled" : "";
-                        echo "<tr data-id='" . $row["id"] . "' data-name='" . $row["product_name"] . "' data-category='" . $row["category_name"] . "' data-stock='" . $row["avail_stock"] . "' data-price='" . $row["price"] . "'>";
-                        echo "<td>" . $row["product_name"] . "</td>";
-                        echo "<td>" . $row["category_name"] . "</td>";
-                        echo "<td>" . $row["avail_stock"] . "</td>";
-                        echo "<td>₱ " . $row["price"] . "</td>";
-                        echo "<td><button class='add-to-cart btn btn-success' data-id='" . $row["id"] . "' $disabled><i class='bi bi-cart-plus'></i></button></td>";
-
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5'>No products found for this branch.</td></tr>";
-                }
-
-                // Close the prepared statement
-                $stmt->close();
-                ?>
-
+                                        $sql = "SELECT p.id, p.product_name, i.price, c.category_name, i.avail_stock
+                                                FROM products p
+                                                INNER JOIN categories c ON p.categories_id = c.id
+                                                INNER JOIN inventory i ON p.id = i.products_id
+                                                WHERE p.branches_id = ?";
+                                        
+                                        $stmt = $con->prepare($sql);
+                                        $stmt->bind_param("i", $_SESSION['branches_id']);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        
+                                        while ($row = $result->fetch_assoc()) {
+                                            $disabled = ($row["avail_stock"] == 0) ? "disabled" : "";
+                                            $stockClass = ($row["avail_stock"] == 0) ? "badge-danger" : 
+                                                         ($row["avail_stock"] < 10 ? "badge-warning" : "badge-success");
+                                            
+                                            echo "<tr data-id='{$row["id"]}' data-name='{$row["product_name"]}' 
+                                                  data-category='{$row["category_name"]}' data-stock='{$row["avail_stock"]}' 
+                                                  data-price='{$row["price"]}'>";
+                                            echo "<td>{$row["product_name"]}</td>";
+                                            echo "<td>{$row["category_name"]}</td>";
+                                            echo "<td><span class='badge $stockClass'>{$row["avail_stock"]}</span></td>";
+                                            echo "<td>₱" . number_format($row["price"], 2) . "</td>";
+                                            echo "<td>
+                                                  <button class='add-to-cart btn btn-sm btn-primary' data-id='{$row["id"]}' $disabled>
+                                                  <i class='bi bi-cart-plus'></i> Add</button></td>";
+                                            echo "</tr>";
+                                        }
+                                        $stmt->close();
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -174,61 +210,62 @@ include '../includes/footer.php';
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <!-- Order Column -->
+                <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Customer Orders</h4>
+                            <h4 class="mb-0"><i class="bi bi-receipt me-2"></i>Customer Order</h4>
                         </div>
                         <div class="card-body">
-
-
-
                             <form method="POST" id="order-form">
-                            <div class="form-group row">
-        <label for="transaction-id" class="col-form-label col-sm-4" style="margin-right: -50;"><strong>Transaction No.:</strong></label>
-        <div class="col-sm-8">
-            <span class="form-control-plaintext font-weight-bold" id="transaction-id-display"></span>
-            <input type="hidden" id="hidden-transaction-id" name="transaction_no">
-        </div>
-    </div>
-                                <table id="myTable" class="custom-table table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>Items</th>
-                                            <th>Quantity</th>
-                                            <th>Unit Price</th>
-                                            <th>Total Price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="cart-items" class="text-center">
-                                        <!-- Cart items dynamically added here -->
-                                    </tbody>
-                                </table>
-
-                                <div class="d-flex justify-content-end mb-3">
-                                    <h5 class="mb-0">Grand Total: ₱<span id="grand-total">0</span></h5>
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label fw-bold">Transaction No.</label>
+                                    <div class="col-sm-8">
+                                        <span class="form-control-plaintext fw-bold text-primary" id="transaction-id-display"></span>
+                                        <input type="hidden" id="hidden-transaction-id" name="transaction_no">
+                                    </div>
+                                </div>
+                                
+                                <div class="table-responsive mb-3">
+                                    <table class="custom-table table">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Qty</th>
+                                                <th>Price</th>
+                                                <th>Total</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cart-items">
+                                            <!-- Cart items will appear here -->
+                                        </tbody>
+                                    </table>
                                 </div>
 
-                                <div class="form-group row">
-                                    <label for="vat" class="col-form-label col-sm-4">VAT (%):</label>
-                                    <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="vat" name="vat" value="12" readonly>
+                                <div class="total-display">
+                                    <div class="row mb-2">
+                                        <div class="col-6 text-muted">Subtotal:</div>
+                                        <div class="col-6 text-end fw-bold">₱<span id="subtotal">0.00</span></div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-6 text-muted">Discount:</div>
+                                        <div class="col-6 text-end fw-bold">-₱<span id="discount-amount">0.00</span></div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-6 text-muted">VAT (12%):</div>
+                                        <div class="col-6 text-end fw-bold">₱<span id="vat-amount">0.00</span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 h5">Grand Total:</div>
+                                        <div class="col-6 text-end h4 text-primary fw-bold">₱<span id="grand-total">0.00</span></div>
                                     </div>
                                 </div>
 
-                                <script>
-                                    function applyVAT(price) {
-                                        const vatPercentage = 12; // Fixed VAT
-                                        return (price * vatPercentage / 100).toFixed(2); // Calculates VAT amount
-                                    }
-                                </script>
-
-
-                                <div class="form-group row">
-                                    <label for="discount" class="col-form-label col-sm-4">Discount:</label>
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Discount Type</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="discount" name="discount">
+                                        <select class="form-select" id="discount" name="discount">
                                             <option value="0">0%</option>
                                             <option value="20">20%</option>
                                             <option value="40">40%</option>
@@ -236,23 +273,37 @@ include '../includes/footer.php';
                                     </div>
                                 </div>
 
-                                <div class="form-group mt-2 row">
-                                    <label for="cashTendered" class="col-form-label col-sm-4">Cash Tendered:</label>
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Cash Tendered</label>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="cashTendered" value="">
-                                        <span class="text-danger d-none" id="insufficient-balance">Insufficient Balance</span>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="number" class="form-control" id="cashTendered" name="cash_tendered" min="0" step="0.01" placeholder="0.00">
+                                        </div>
+                                        <small class="text-danger d-none" id="insufficient-balance">
+                                            <i class="bi bi-exclamation-circle"></i> Insufficient amount
+                                        </small>
                                     </div>
                                 </div>
 
-                                <div class="mt-2 mb-2 text-right">
-                                    <h5>Change: ₱<span id="change">0</span></h5>
+                                <div class="row mb-4">
+                                    <label class="col-sm-4 col-form-label">Change Due</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="text" class="form-control bg-light" id="change" value="0.00" readonly>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-12">
-                                    <button type="button" class="btn btn-success" id="process-order">Process
-                                        Order</button>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-primary me-md-2" id="print-receipt" disabled>
+                                        <i class="bi bi-printer me-1"></i>Print Receipt
+                                    </button>
+                                    <button type="button" class="btn btn-success" id="process-order" disabled>
+                                        <i class="bi bi-check-circle me-1"></i>Process Order
+                                    </button>
                                 </div>
-
                                 
                                 <input type="hidden" name="cart" id="cart-data">
                             </form>
@@ -261,219 +312,376 @@ include '../includes/footer.php';
                 </div>
             </div>
         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                new simpleDatatables.DataTable("#myTable");
-            });
-        </script>
-  <script>
+
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Order</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to process this order?</p>
+                        <div class="alert alert-info">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Total Amount:</strong>
+                                <span>₱<span id="modal-total">0.00</span></span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Cash Received:</strong>
+                                <span>₱<span id="modal-cash">0.00</span></span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <strong>Change Due:</strong>
+                                <span>₱<span id="modal-change">0.00</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i>Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" id="confirm-process">
+                            <i class="bi bi-check-circle me-1"></i>Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <?php include '../includes/footer.php'; ?>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
     document.addEventListener("DOMContentLoaded", function () {
         let cartItems = [];
-        const vatElement = document.getElementById('vat');
+        const vatRate = 0.12;
         const discountElement = document.getElementById('discount');
         const cashTenderedElement = document.getElementById('cashTendered');
         const processOrderButton = document.getElementById('process-order');
+        const printReceiptButton = document.getElementById('print-receipt');
         const insufficientBalanceSpan = document.getElementById('insufficient-balance');
         const transactionIdDisplay = document.getElementById('transaction-id-display');
         const transactionIdInput = document.getElementById('hidden-transaction-id');
+        const subtotalElement = document.getElementById('subtotal');
+        const discountAmountElement = document.getElementById('discount-amount');
+        const vatAmountElement = document.getElementById('vat-amount');
         const grandTotalElement = document.getElementById('grand-total');
         const changeElement = document.getElementById('change');
-
-       function generateTransactionNumber() {
-    const number = Math.floor(Math.random() * 100000);
-    return number.toString().padStart(5, '0');
-}
-
-
-
-        function calculateTotalPrice() {
-            return cartItems.reduce((total, item) => total + item.quantity * item.unitPrice, 0);
+        
+        // Generate random transaction number
+        function generateTransactionNumber() {
+            const now = new Date();
+            const datePart = now.getFullYear().toString().substr(-2) + 
+                           (now.getMonth() + 1).toString().padStart(2, '0') + 
+                           now.getDate().toString().padStart(2, '0');
+            const randomPart = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `TRX-${datePart}-${randomPart}`;
         }
-
-        function calculateGrandTotal(totalPrice) {
-            const vat = parseFloat(vatElement.value) / 100;
-            const discount = parseFloat(discountElement.value) / 100;
-            const vatAmount = totalPrice * vat;
-            const discountAmount = totalPrice * discount;
-            return totalPrice + vatAmount - discountAmount;
+        
+        // Calculate all financial values
+        function calculateFinancials() {
+            const subtotal = cartItems.reduce((total, item) => total + (item.quantity * item.unitPrice), 0);
+            const discountPercent = parseFloat(discountElement.value);
+            const discountAmount = subtotal * (discountPercent / 100);
+            const discountedSubtotal = subtotal - discountAmount;
+            const vatAmount = discountedSubtotal * vatRate;
+            const grandTotal = discountedSubtotal + vatAmount;
+            const cashTendered = parseFloat(cashTenderedElement.value) || 0;
+            const change = cashTendered - grandTotal;
+            
+            return {
+                subtotal,
+                discountAmount,
+                vatAmount,
+                grandTotal,
+                change,
+                isPaymentValid: cashTendered >= grandTotal && cashTendered > 0
+            };
         }
-
+        
+        // Update all financial displays
+        function updateFinancialDisplay() {
+            const { subtotal, discountAmount, vatAmount, grandTotal, change, isPaymentValid } = calculateFinancials();
+            
+            subtotalElement.textContent = subtotal.toFixed(2);
+            discountAmountElement.textContent = discountAmount.toFixed(2);
+            vatAmountElement.textContent = vatAmount.toFixed(2);
+            grandTotalElement.textContent = grandTotal.toFixed(2);
+            changeElement.value = Math.max(0, change).toFixed(2);
+            
+            insufficientBalanceSpan.classList.toggle('d-none', isPaymentValid);
+            processOrderButton.disabled = cartItems.length === 0 || !isPaymentValid;
+            printReceiptButton.disabled = cartItems.length === 0;
+        }
+        
+        // Update cart items display
         function updateCartItems() {
             const cartItemsContainer = document.getElementById('cart-items');
             cartItemsContainer.innerHTML = '';
-
+            
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            <i class="bi bi-cart-x fs-1"></i>
+                            <p class="mt-2">No items in cart</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
             cartItems.forEach((item, index) => {
                 const row = document.createElement('tr');
+                row.dataset.id = item.id;
                 row.innerHTML = `
                     <td>${item.name}</td>
                     <td>
-                        <div class="input-group">
-                            <button class="btn-outline-secondary btn" type="button" onclick="decreaseQuantity(${index})">−</button>
-                            <input type="number" value="${item.quantity}" min="1" class="form-control text-center" data-index="${index}" onchange="updateQuantity(${index}, this.value)">
-                            <button class="btn-outline-secondary btn" type="button" onclick="increaseQuantity(${index})">+</button>
+                        <div class="d-flex quantity-control">
+                            <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity(${index})">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <input type="number" value="${item.quantity}" min="1" max="${item.maxQuantity}" 
+                                   class="form-control text-center mx-1" 
+                                   onchange="updateQuantity(${index}, this.value)">
+                            <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity(${index})">
+                                <i class="bi bi-plus"></i>
+                            </button>
                         </div>
                     </td>
                     <td>₱${item.unitPrice.toFixed(2)}</td>
                     <td>₱${(item.quantity * item.unitPrice).toFixed(2)}</td>
-                    <td><button class="btn btn-danger" onclick="removeItem(${index})"><i class="bi bi-trash"></i></button></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
                 `;
                 cartItemsContainer.appendChild(row);
             });
-
-            updateGrandTotal();
-            toggleInputs();
+            
+            updateFinancialDisplay();
         }
-
-        function updateGrandTotal() {
-            const totalPrice = calculateTotalPrice();
-            const grandTotal = calculateGrandTotal(totalPrice);
-            grandTotalElement.innerText = grandTotal.toFixed(2);
-            updateChange();
-        }
-
-        function updateChange() {
-            const grandTotal = parseFloat(grandTotalElement.innerText);
-            const cashTendered = parseFloat(cashTenderedElement.value) || 0;
-            const change = cashTendered - grandTotal;
-
-            // Hide change if no cash tendered or cash tendered is less than grand total
-            if (cashTendered === 0 || cashTendered < grandTotal) {
-                changeElement.innerText = ''; // Hide change amount
-            } else {
-                changeElement.innerText = change.toFixed(2); // Show change amount
-            }
-
-            // Show or hide insufficient balance message
-            insufficientBalanceSpan.classList.toggle('d-none', cashTendered >= grandTotal || cashTendered === 0);
-
-            // Disable process order button if cash tendered is insufficient or not inputted
-            processOrderButton.disabled = cartItems.length === 0 || cashTendered < grandTotal || cashTendered === 0;
-        }
-
-        function toggleInputs() {
-            const isCartEmpty = cartItems.length === 0;
-
-            vatElement.disabled = isCartEmpty;
-            discountElement.disabled = isCartEmpty;
-            cashTenderedElement.disabled = isCartEmpty;
-
-            if (isCartEmpty) {
-                grandTotalElement.innerText = '0.00';
-                changeElement.innerText = '0.00';
-                insufficientBalanceSpan.classList.add('d-none');
-                processOrderButton.disabled = true;
-            } else {
-                updateChange(); // Ensure button status updates correctly
-            }
-        }
-
-        vatElement.addEventListener('change', updateGrandTotal);
-        discountElement.addEventListener('change', updateGrandTotal);
-        cashTenderedElement.addEventListener('input', updateChange);
-
+        
+        // Add to cart functionality
         document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const row = this.closest('tr');
-                const id = row.getAttribute('data-id');
-                const name = row.getAttribute('data-name');
-                const category = row.getAttribute('data-category');
-                const stock = parseInt(row.getAttribute('data-stock'));
-                const price = parseFloat(row.getAttribute('data-price'));
-
-                const existingItemIndex = cartItems.findIndex(item => item.id === id);
-
-                if (existingItemIndex !== -1) {
-                    cartItems[existingItemIndex].quantity += 1;
+                const id = row.dataset.id;
+                const name = row.dataset.name;
+                const stock = parseInt(row.dataset.stock);
+                const price = parseFloat(row.dataset.price);
+                
+                const existingItem = cartItems.find(item => item.id === id);
+                
+                if (existingItem) {
+                    if (existingItem.quantity < stock) {
+                        existingItem.quantity += 1;
+                    } else {
+                        alert('Not enough stock available.');
+                        return;
+                    }
                 } else {
-                    cartItems.push({
-                        id,
-                        name,
-                        category,
-                        quantity: 1,
-                        unitPrice: price
-                    });
+                    if (stock > 0) {
+                        cartItems.push({
+                            id, 
+                            name, 
+                            quantity: 1, 
+                            unitPrice: price,
+                            maxQuantity: stock
+                        });
+                    } else {
+                        alert('This product is out of stock.');
+                        return;
+                    }
                 }
-
-                row.setAttribute('data-stock', stock - 1);
-                row.querySelector('td:nth-child(3)').innerText = stock - 1;
+                
+                // Update stock display
+                const newStock = stock - 1;
+                row.dataset.stock = newStock;
+                const badge = row.querySelector('td:nth-child(3) .badge');
+                badge.textContent = newStock;
+                
+                if (newStock === 0) {
+                    badge.classList.remove('badge-success', 'badge-warning');
+                    badge.classList.add('badge-danger');
+                    this.disabled = true;
+                } else if (newStock < 10) {
+                    badge.classList.remove('badge-success', 'badge-danger');
+                    badge.classList.add('badge-warning');
+                }
+                
                 updateCartItems();
             });
         });
-
-        window.increaseQuantity = function (index) {
+        
+        // Quantity adjustment functions
+        window.increaseQuantity = function(index) {
             const item = cartItems[index];
-            const productRow = document.querySelector(`tr[data-id="${item.id}"]`);
-            let stock = parseInt(productRow.getAttribute('data-stock'));
-
-            if (stock > 0) {
+            if (item.quantity < item.maxQuantity) {
                 item.quantity += 1;
-                stock -= 1;
-                productRow.setAttribute('data-stock', stock);
-                productRow.querySelector('td:nth-child(3)').innerText = stock;
+                
+                // Update stock display
+                const productRow = document.querySelector(`#products-table tr[data-id="${item.id}"]`);
+                const newStock = parseInt(productRow.dataset.stock) - 1;
+                productRow.dataset.stock = newStock;
+                const badge = productRow.querySelector('td:nth-child(3) .badge');
+                badge.textContent = newStock;
+                
+                if (newStock === 0) {
+                    badge.classList.remove('badge-success', 'badge-warning');
+                    badge.classList.add('badge-danger');
+                    productRow.querySelector('.add-to-cart').disabled = true;
+                } else if (newStock < 10) {
+                    badge.classList.remove('badge-success', 'badge-danger');
+                    badge.classList.add('badge-warning');
+                }
+                
+                updateCartItems();
             } else {
-                alert("Not enough stock available.");
+                alert('Cannot exceed available stock');
             }
-
-            updateCartItems();
         };
-
-        window.decreaseQuantity = function (index) {
+        
+        window.decreaseQuantity = function(index) {
             const item = cartItems[index];
-            const productRow = document.querySelector(`tr[data-id="${item.id}"]`);
-            let stock = parseInt(productRow.getAttribute('data-stock'));
-
             if (item.quantity > 1) {
                 item.quantity -= 1;
-                stock += 1;
-                productRow.setAttribute('data-stock', stock);
-                productRow.querySelector('td:nth-child(3)').innerText = stock;
+                
+                // Update stock display
+                const productRow = document.querySelector(`#products-table tr[data-id="${item.id}"]`);
+                const newStock = parseInt(productRow.dataset.stock) + 1;
+                productRow.dataset.stock = newStock;
+                const badge = productRow.querySelector('td:nth-child(3) .badge');
+                badge.textContent = newStock;
+                
+                if (newStock > 0) {
+                    badge.classList.remove('badge-danger');
+                    if (newStock < 10) {
+                        badge.classList.add('badge-warning');
+                    } else {
+                        badge.classList.add('badge-success');
+                    }
+                    productRow.querySelector('.add-to-cart').disabled = false;
+                }
+                
+                updateCartItems();
             }
-
-            updateCartItems();
         };
-
-        window.updateQuantity = function (index, quantity) {
-            const item = cartItems[index];
-            const productRow = document.querySelector(`tr[data-id="${item.id}"]`);
-            let stock = parseInt(productRow.getAttribute('data-stock')) + item.quantity;
-
+        
+        window.updateQuantity = function(index, quantity) {
             const newQuantity = parseInt(quantity);
-
-            if (newQuantity > stock) {
-                alert("Not enough stock available.");
+            if (isNaN(newQuantity)) return;
+            
+            const item = cartItems[index];
+            const productRow = document.querySelector(`#products-table tr[data-id="${item.id}"]`);
+            const currentStock = parseInt(productRow.dataset.stock) + item.quantity;
+            
+            if (newQuantity < 1 || newQuantity > currentStock) {
+                alert('Invalid quantity');
                 return;
             }
-
-            productRow.setAttribute('data-stock', stock - newQuantity);
-            productRow.querySelector('td:nth-child(3)').innerText = stock - newQuantity;
-
+            
+            const stockDiff = item.quantity - newQuantity;
             item.quantity = newQuantity;
+            
+            // Update stock display
+            const newStock = parseInt(productRow.dataset.stock) + stockDiff;
+            productRow.dataset.stock = newStock;
+            const badge = productRow.querySelector('td:nth-child(3) .badge');
+            badge.textContent = newStock;
+            
+            if (newStock === 0) {
+                badge.classList.remove('badge-success', 'badge-warning');
+                badge.classList.add('badge-danger');
+                productRow.querySelector('.add-to-cart').disabled = true;
+            } else if (newStock < 10) {
+                badge.classList.remove('badge-success', 'badge-danger');
+                badge.classList.add('badge-warning');
+            } else {
+                badge.classList.remove('badge-warning', 'badge-danger');
+                badge.classList.add('badge-success');
+            }
+            
             updateCartItems();
         };
-
-        window.removeItem = function (index) {
+        
+        window.removeItem = function(index) {
+            const item = cartItems[index];
+            const productRow = document.querySelector(`#products-table tr[data-id="${item.id}"]`);
+            
+            // Update stock display
+            const newStock = parseInt(productRow.dataset.stock) + item.quantity;
+            productRow.dataset.stock = newStock;
+            const badge = productRow.querySelector('td:nth-child(3) .badge');
+            badge.textContent = newStock;
+            
+            if (newStock > 0) {
+                badge.classList.remove('badge-danger');
+                if (newStock < 10) {
+                    badge.classList.add('badge-warning');
+                } else {
+                    badge.classList.add('badge-success');
+                }
+                productRow.querySelector('.add-to-cart').disabled = false;
+            }
+            
             cartItems.splice(index, 1);
             updateCartItems();
         };
-
-        document.getElementById('process-order').addEventListener('click', function () {
-            const cartData = JSON.stringify(cartItems);
-            document.getElementById('cart-data').value = cartData;
-
-            const transactionNo = generateTransactionNumber();
-            transactionIdDisplay.innerText = transactionNo;
-            transactionIdInput.value = transactionNo;
-
+        
+        // Process order confirmation
+        document.getElementById('process-order').addEventListener('click', function() {
+            const { grandTotal, change } = calculateFinancials();
+            const cashTendered = parseFloat(cashTenderedElement.value) || 0;
+            
+            if (cashTendered < grandTotal) {
+                alert('Insufficient cash tendered');
+                return;
+            }
+            
+            // Update modal values
+            document.getElementById('modal-total').textContent = grandTotal.toFixed(2);
+            document.getElementById('modal-cash').textContent = cashTendered.toFixed(2);
+            document.getElementById('modal-change').textContent = change.toFixed(2);
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            modal.show();
+        });
+        
+        // Confirm order processing
+        document.getElementById('confirm-process').addEventListener('click', function() {
+            document.getElementById('cart-data').value = JSON.stringify(cartItems);
             document.getElementById('order-form').submit();
         });
-
+        
+        // Print receipt button
+        document.getElementById('print-receipt').addEventListener('click', function() {
+            // This would be implemented with a proper receipt printing solution
+            alert('Receipt printing functionality would be implemented here');
+        });
+        
+        // Event listeners for financial updates
+        discountElement.addEventListener('change', updateFinancialDisplay);
+        cashTenderedElement.addEventListener('input', updateFinancialDisplay);
+        
+        // Initialize transaction number
         const transactionNo = generateTransactionNumber();
-    transactionIdDisplay.innerText = transactionNo;
-    transactionIdInput.value = transactionNo;
-
-    toggleInputs();
+        transactionIdDisplay.textContent = transactionNo;
+        transactionIdInput.value = transactionNo;
+        
+        // Initialize empty cart display
+        updateCartItems();
     });
-</script>
+    </script>
+</body>
+</html>
 
         <style>
             .custom-table {

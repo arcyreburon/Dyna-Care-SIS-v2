@@ -23,7 +23,7 @@
             </li><!-- End Search Icon-->
 
             <li class="dropdown nav-item">
-                <a class="nav-icon nav-link" href="#" data-bs-toggle="dropdown" id="notification-bell">
+                <a class="nav-icon nav-link" href="#" data-bs-toggle="dropdown" id="notification-bell" style="margin-right: 0px; padding-left: 17px; padding-right: 0px;">
                     <i class="bi bi-bell"></i>
                     <!-- Small red dot on top of the bell -->
                     <span class="notification-dot" id="notification-dot"

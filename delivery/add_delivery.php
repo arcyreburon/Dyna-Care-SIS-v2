@@ -69,7 +69,7 @@ include '../includes/footer.php';
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Update Inventory</h5>
+                            <h5 class="card-title">Add Delivery</h5>
 
                             <!-- Display alert message -->
                             <?php if (isset($_SESSION['message'])): ?>

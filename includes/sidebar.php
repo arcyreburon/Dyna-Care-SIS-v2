@@ -1,141 +1,266 @@
 <?php
-// Get user role from session (Super Admin, Admin, Inventory Clerk, Cashier)
-$user_role = $_SESSION['user_role']; 
+// Get user role from session
+$user_role = $_SESSION['user_role'] ?? 'Undefined';
 
 // Get the current page filename to determine active link
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Function to check if user has access to a menu item
+function hasAccess($requiredRoles, $userRole) {
+    return in_array($userRole, $requiredRoles);
+}
 ?>
 
-<!-- ======= Expanded Sidebar ======= -->
+<!-- ======= Sidebar - Original Width ======= -->
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
 
-    <!-- Dashboard (Super Admin, Admin only) -->
-    <?php if ($user_role === 'Super Admin' || $user_role === 'Admin') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : '' ?>" href="../superadmin/dashboard.php">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Dashboard -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Super Admin', 'Admin'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../superadmin/dashboard.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
+      </a>
+    </li>
 
-    <?php if ($user_role === 'Inventory Clerk' || $user_role === 'Admin') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'products_table.php') ? 'active' : '' ?>" href="../products/products_table.php">
-          <i class="bi bi-boxes"></i>
-          <span>Products</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Products -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Inventory Clerk', 'Admin'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'products_table.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../products/products_table.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-boxes"></i>
+        <span>Products</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
+      </a>
+    </li>
 
-    <!-- Inventory (Inventory Clerk only) -->
-    <?php if ($user_role === 'Inventory Clerk' || $user_role === 'Super Admin' || $user_role === 'Admin') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'inventory.php') ? 'active' : '' ?>" href="../inventory/inventory_table.php">
-          <i class="bi bi-box-seam"></i>
-          <span>Inventory</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Inventory -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Inventory Clerk', 'Super Admin', 'Admin'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'inventory.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../inventory/inventory_table.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-box-seam"></i>
+        <span>Inventory</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
+      </a>
+    </li>
 
-    <?php if ($user_role === 'Inventory Clerk') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'archive.php') ? 'active' : '' ?>" href="../inventory/archive.php">
-          <i class="bi bi-archive"></i>
-          <span>Archive</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Archive -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Inventory Clerk'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'archive.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../inventory/archive.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-archive"></i>
+        <span>Archive</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Inventory Only</span><?php endif; ?>
+      </a>
+    </li>
 
-    <?php if ($user_role === 'Inventory Clerk' || $user_role === 'Super Admin' || $user_role === 'Admin') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'delivery.php') ? 'active' : '' ?>" href="../delivery/delivery.php">
-          <i class="bi bi-truck"></i>
-          <span>Delivery</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Delivery -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Inventory Clerk', 'Super Admin', 'Admin'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'delivery.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../delivery/delivery.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-truck"></i>
+        <span>Delivery</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Restricted</span><?php endif; ?>
+      </a>
+    </li>
 
-    <!-- Sales (Admin, Cashier only) -->
-    <?php if ($user_role === 'Cashier') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'sales_report.php') ? 'active' : '' ?>" href="../cashier/sales_report.php">
-          <i class="bi bi-bar-chart-line"></i> 
-          <span>Sales Report</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Sales Report -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Cashier'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'sales_report.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../cashier/sales_report.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-bar-chart-line"></i>
+        <span>Sales Report</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Cashier Only</span><?php endif; ?>
+      </a>
+    </li>
 
-    <!-- Sales (Admin, Cashier only) -->
-    <?php if ($user_role === 'Cashier') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'sales.php') ? 'active' : '' ?>" href="../cashier/sales.php">
-          <i class="bi bi-receipt"></i>
-          <span>Sales Invoice</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Sales Invoice -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Cashier'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'sales.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../cashier/sales.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-receipt"></i>
+        <span>Sales Invoice</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Cashier Only</span><?php endif; ?>
+      </a>
+    </li>
 
-    <!-- Reports (Admin, Super Admin, Cashier) -->
-    <?php if ($user_role === 'Super Admin' || $user_role === 'Admin') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= $settings_link_active ?> collapsed" data-bs-target="#reports-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="reports-nav" class="nav-content collapse <?= $settings_active ?>" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="../superadmin/audit_trail.php" class="<?= ($current_page == 'audit_trail.php') ? 'active' : '' ?>">
-              <i class="bi bi-circle"></i><span>Transactions</span>
-            </a>
-          </li>
-          <li>
-            <a href="../superadmin/sales_branch.php" class="<?= ($current_page == 'sales_report.php') ? 'active' : '' ?>">
-              <i class="bi bi-circle"></i><span>Sales Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="../superadmin/order.php" class="<?= ($current_page == 'order.php') ? 'active' : '' ?>">
-              <i class="bi bi-circle"></i><span>Re-Order</span>
-            </a>
-          </li>
-          <li>
-            <a href="../superadmin/reports.php" class="<?= ($current_page == 'expiring_medicines.php') ? 'active' : '' ?>">
-              <i class="bi bi-circle"></i><span>Reports</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-    <?php } ?>
+    <!-- Transaction -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Cashier'], $user_role); ?>
+      <a class="nav-link <?= ($current_page == 'transaction.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         href="<?= $hasAccess ? '../cashier/transaction.php' : '#' ?>" 
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-cash-stack"></i>
+        <span>Transaction</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Cashier Only</span><?php endif; ?>
+      </a>
+    </li>
 
-    <!-- Transaction (Cashier only) -->
-    <?php if ($user_role === 'Cashier') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'transaction.php') ? 'active' : '' ?>" href="../cashier/transaction.php">
-          <i class="bi bi-cash-stack"></i>
-          <span>Transaction</span>
-        </a>
-      </li>
-    <?php } ?>
+    <!-- Reports Dropdown -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Super Admin', 'Admin'], $user_role); ?>
+      <a class="nav-link collapsed <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         data-bs-target="#reports-nav" 
+         data-bs-toggle="<?= $hasAccess ? 'collapse' : 'none' ?>" 
+         href="#"
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-bar-chart-line"></i>
+        <span>Reports</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Admin Only</span><?php endif; ?>
+        <i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="reports-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="<?= $hasAccess ? '../superadmin/audit_trail.php' : '#' ?>" 
+             class="<?= ($current_page == 'audit_trail.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>"
+             <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+            <i class="bi bi-circle"></i><span>Transactions</span>
+          </a>
+        </li>
+        <li>
+          <a href="<?= $hasAccess ? '../superadmin/sales_branch.php' : '#' ?>" 
+             class="<?= ($current_page == 'sales_report.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>"
+             <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+            <i class="bi bi-circle"></i><span>Sales Report</span>
+          </a>
+        </li>
+      </ul>
+    </li>
 
-    <!-- Settings (Super Admin, Admin only) -->
-    <?php if ($user_role === 'Super Admin' || $user_role === 'Admin') { ?>
-      <li class="nav-item">
-        <a class="nav-link <?= $settings_link_active ?> collapsed" data-bs-target="#settings-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gear"></i><span>Settings</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="settings-nav" class="nav-content collapse <?= $settings_active ?>" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="../settings/manage_users.php" class="<?= ($current_page == 'manage_users.php') ? 'active' : '' ?>">
-              <i class="bi bi-circle"></i><span>Manage Users</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-    <?php } ?>
+    <!-- Settings Dropdown -->
+    <li class="nav-item">
+      <?php $hasAccess = hasAccess(['Super Admin', 'Admin'], $user_role); ?>
+      <a class="nav-link collapsed <?= !$hasAccess ? 'disabled-item' : '' ?>" 
+         data-bs-target="#settings-nav" 
+         data-bs-toggle="<?= $hasAccess ? 'collapse' : 'none' ?>" 
+         href="#"
+         <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+        <i class="bi bi-gear"></i>
+        <span>Settings</span>
+        <?php if (!$hasAccess): ?><span class="no-access-badge">Admin Only</span><?php endif; ?>
+        <i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="settings-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="<?= $hasAccess ? '../settings/manage_users.php' : '#' ?>" 
+             class="<?= ($current_page == 'manage_users.php') ? 'active' : '' ?> <?= !$hasAccess ? 'disabled-item' : '' ?>"
+             <?= !$hasAccess ? 'onclick="return false;"' : '' ?>>
+            <i class="bi bi-circle"></i><span>Manage Users</span>
+          </a>
+        </li>
+      </ul>
+    </li>
 
   </ul>
-</aside><!-- End Sidebar -->
+</aside>
+
+<style>
+/* Original Sidebar Styling */
+:root {
+  --sidebar-bg: #f8f9fa;
+  --sidebar-width: 250px;
+  --sidebar-item-padding: 0.75rem 1.25rem;
+  --sidebar-icon-size: 1.25rem;
+  --sidebar-text-size: 0.9rem;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  min-height: 100vh;
+}
+
+.nav-link {
+  padding: var(--sidebar-item-padding);
+}
+
+.nav-link i {
+  font-size: var(--sidebar-icon-size);
+}
+
+.nav-link span {
+  font-size: var(--sidebar-text-size);
+}
+
+/* Disabled Items */
+.disabled-item {
+  color: #adb5bd !important;
+  pointer-events: none;
+  cursor: default;
+}
+
+.disabled-item i {
+  color: #adb5bd !important;
+}
+
+/* Smaller Badges */
+.no-access-badge {
+  position: absolute;
+  right: 10px;
+  background-color: #e9ecef;
+  color: #6c757d;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 0.6rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Active State */
+.nav-link.active {
+  background-color: #e9ecef !important;
+  color: #000 !important;
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #0d6efd;
+}
+
+/* Dropdown Items */
+.nav-content .nav-link {
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 80px;
+  }
+  .sidebar .nav-link span, 
+  .sidebar .no-access-badge {
+    display: none;
+  }
+  .sidebar:hover {
+    width: var(--sidebar-width);
+  }
+  .sidebar:hover .nav-link span,
+  .sidebar:hover .no-access-badge {
+    display: inline-block;
+  }
+}
+</style>
 
 <style>
 :root {

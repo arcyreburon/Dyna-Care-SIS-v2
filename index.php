@@ -301,6 +301,12 @@
     box-sizing: border-box;
   }
 
+  .vl {
+    border-left: 2px solid grey;
+    opacity: 60%;
+    height: 20px;
+  }
+
   body {
     font-family: 'Poppins';
     font-weight: 400;
