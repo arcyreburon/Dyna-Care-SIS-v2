@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2025 at 10:13 AM
+-- Generation Time: May 07, 2025 at 12:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -114,8 +114,20 @@ CREATE TABLE `delivery` (
 --
 
 INSERT INTO `delivery` (`id`, `dosage`, `product_name`, `brand`, `batch`, `supplier`, `price`, `received`, `expiration_date`, `delivery_man`, `contact_number`, `quantity`, `categories_id`, `branch_id`) VALUES
-(2, '', 'Tissue', 'Y', 'Batch 1', 'XYZ Company', 22, '2025-02-16', '2025-02-16', '0', '09876543211', '80', 2, NULL),
-(3, '', 'Paracetamol', 'Bioflu', '874568357', 'Reburon', 590, '2025-04-29', '2030-04-26', '0', '09123456789', '200', 1, NULL);
+(2, '', 'Tissue', 'Y', 'Batch 1', 'XYZ Company', 22, '2025-02-16', '2025-02-16', '0', '09876543211', '79', 2, NULL),
+(3, '', 'Paracetamol', 'Bioflu', '874568357', 'Reburon', 590, '2025-04-29', '2030-04-26', '0', '09123456789', '199', 1, NULL),
+(4, '', 'Ibufropen', 'Medicol', '723465827', 'QWERTY', 34, '2025-05-05', '2028-09-23', '0', '0974 283 4728', '34', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dosage_forms`
+--
+
+CREATE TABLE `dosage_forms` (
+  `id` int(11) NOT NULL,
+  `form_name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -136,51 +148,68 @@ CREATE TABLE `inventory` (
   `old_price` decimal(10,2) NOT NULL,
   `brand` varchar(100) NOT NULL,
   `received` varchar(100) NOT NULL,
-  `branches_id` int(20) NOT NULL
+  `branches_id` int(20) NOT NULL,
+  `unit_measure` varchar(50) DEFAULT NULL,
+  `material_type` varchar(50) DEFAULT NULL,
+  `supplier` varchar(255) DEFAULT NULL,
+  `storage_instructions` text DEFAULT NULL,
+  `sku` varchar(100) DEFAULT NULL,
+  `reorder_level` int(11) DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `acquisition_cost` decimal(10,2) DEFAULT NULL,
+  `warranty_details` text DEFAULT NULL,
+  `strength` varchar(50) DEFAULT NULL,
+  `generic_name` varchar(100) DEFAULT NULL,
+  `supply_type` varchar(50) DEFAULT NULL,
+  `size` varchar(50) DEFAULT NULL,
+  `model_number` varchar(50) DEFAULT NULL,
+  `warranty` varchar(50) DEFAULT NULL,
+  `dosage_form_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `products_id`, `avail_stock`, `damage_stock`, `release_stock`, `price`, `delivery_price`, `batch`, `dosage`, `old_price`, `brand`, `received`, `branches_id`) VALUES
-(36, 34, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(38, 36, 45, 0, 0, 6.00, 7.00, '', '', 0.00, '', '', 1),
-(39, 37, 40, 0, 0, 7.00, 20.00, '0', '2', 5.00, 'X', '2025-02-03', 2),
-(40, 38, 0, 0, 0, 50.00, 15.00, '', '', 0.00, '', '', 1),
-(42, 40, 36, 0, 0, 40.00, 12.00, '', '', 0.00, '', '', 1),
-(43, 41, 43, 0, 0, 40.00, 12.00, '', '', 0.00, '', '', 2),
-(45, 43, 0, 0, 0, 25.00, 8.00, '', '', 0.00, '', '', 2),
-(47, 45, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(48, 46, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(49, 47, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(50, 48, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(51, 49, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(52, 50, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(53, 51, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(54, 52, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(55, 53, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(56, 54, 87, 0, 0, 1.70, 0.00, '', '', 0.00, '', '', 1),
-(57, 55, 80, 0, 0, 1.70, 0.00, '', '', 0.00, '', '', 2),
-(58, 56, 45, 0, 0, 120.00, 40.00, '', '', 0.00, '', '', 1),
-(59, 57, 52, 0, 0, 120.00, 40.00, '0', '0', 110.00, 'X', '2025-02-14', 2),
-(60, 58, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(61, 59, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(62, 60, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(63, 61, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(64, 62, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(65, 63, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(66, 64, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(67, 65, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(68, 66, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(69, 67, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(70, 68, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(71, 69, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2),
-(72, 70, 200, 0, 0, 2.00, 1.00, '', '', 0.00, '', '', 1),
-(73, 71, 120, 0, 0, 2.00, 1.00, '', '', 0.00, '', '', 2),
-(75, 73, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(76, 74, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1),
-(77, 75, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1);
+INSERT INTO `inventory` (`id`, `products_id`, `avail_stock`, `damage_stock`, `release_stock`, `price`, `delivery_price`, `batch`, `dosage`, `old_price`, `brand`, `received`, `branches_id`, `unit_measure`, `material_type`, `supplier`, `storage_instructions`, `sku`, `reorder_level`, `purchase_date`, `acquisition_cost`, `warranty_details`, `strength`, `generic_name`, `supply_type`, `size`, `model_number`, `warranty`, `dosage_form_id`) VALUES
+(36, 34, 2, 0, 0, 4000.00, 0.00, '345345', '0', 0.00, 'fdsg', '2025-04-30', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 36, 38, 3, 0, 9.00, 64.00, '345655', '0', 0.00, 'Advil', '2025-05-03', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '500mg', 'Advil', 'Disposable', 'Large', '456345', '3 Years', NULL),
+(39, 37, 40, 1, 0, 127.00, 20.00, '0', '0', 5.00, 'Arcy', '2025-02-03', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '500mg', NULL, '', '', '', '', NULL),
+(40, 38, 0, 0, 0, 50.00, 15.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 40, 33, 0, 0, 40.00, 12.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, 41, 43, 0, 0, 40.00, 12.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, 43, 0, 0, 0, 25.00, 8.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, 45, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, 46, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, 47, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(50, 48, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 49, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 50, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(53, 51, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(54, 52, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(55, 53, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 54, 87, 0, 0, 1.70, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 55, 80, 0, 0, 1.70, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 56, 45, 0, 0, 120.00, 40.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 57, 52, 0, 0, 120.00, 40.00, '0', '0', 110.00, 'X', '2025-02-14', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 58, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 59, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 60, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 61, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 62, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 63, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, 64, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 65, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 66, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 67, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 68, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 69, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(72, 70, 200, 0, 0, 2.00, 1.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(73, 71, 120, 0, 0, 2.00, 1.00, '', '', 0.00, '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(75, 73, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(76, 74, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(77, 75, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(78, 76, 0, 0, 0, 0.00, 0.00, '', '', 0.00, '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -248,7 +277,8 @@ CREATE TABLE `others` (
   `old_price` decimal(10,2) DEFAULT NULL,
   `dosage` varchar(255) DEFAULT NULL,
   `received` datetime DEFAULT NULL,
-  `delivery_man` varchar(255) DEFAULT NULL
+  `delivery_man` varchar(255) DEFAULT NULL,
+  `contact_number` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -273,51 +303,63 @@ CREATE TABLE `products` (
   `strength` varchar(255) DEFAULT NULL,
   `route_of_administration` varchar(255) DEFAULT NULL,
   `manufacturer` varchar(255) DEFAULT NULL,
-  `prescription_required` varchar(255) DEFAULT NULL
+  `prescription_required` varchar(3) DEFAULT NULL,
+  `side_effects` text DEFAULT NULL,
+  `contraindications` text DEFAULT NULL,
+  `storage_instructions` text DEFAULT NULL,
+  `active_ingredients` text DEFAULT NULL,
+  `sku` varchar(255) DEFAULT NULL,
+  `packaging_type` varchar(255) DEFAULT NULL,
+  `material_type` varchar(255) DEFAULT NULL,
+  `specifications` text DEFAULT NULL,
+  `supplier_name` varchar(255) DEFAULT NULL,
+  `warranty` varchar(255) DEFAULT NULL,
+  `usage_instructions` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `product_name`, `categories_id`, `price`, `expiration_date`, `batch`, `supplier`, `branches_id`, `type`, `generic_name`, `dosage`, `form`, `strength`, `route_of_administration`, `manufacturer`, `prescription_required`) VALUES
-(34, 'Amoxicillin', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(36, 'Ibuprofen', 1, 0, '2026-02-03', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 'Ibuprofens', 1, 0, '2026-02-19', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(38, 'Amlodipine', 1, 0, '2025-03-19', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(40, 'Omeprazole', 1, 0, '2025-12-03', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(41, 'Omeprazole', 1, 0, '2025-12-03', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(43, 'Cetirizine', 1, 0, '2027-10-03', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(45, 'Metformin', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(46, 'Losartan', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(47, 'Losartan', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(48, 'Salbutamol', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(49, 'Salbutamol', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(50, 'Loratadine', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(51, 'Loratadine', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(52, 'Surgical Gloves', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(53, 'Surgical Gloves', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(54, 'Sterile Gauze Pads', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(55, 'Sterile Gauze Pads', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(56, 'Thermometer (Digital)', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(57, 'Thermometer (Digital)', 2, 0, '2028-11-16', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, 'Hypodermic Needles', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(59, 'Hypodermic Needles', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(60, 'Face Masks (Surgical)', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(61, 'Face Masks (Surgical)', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(62, 'Alcohol Prep Pads', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(63, 'Alcohol Prep Pads', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(64, 'Blood Pressure Cuff', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(65, 'Blood Pressure Cuff', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(66, 'Cotton Balls', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(67, 'Cotton Balls', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(68, 'Surgical Scalpels', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 'Surgical Scalpels', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 'Elastic Bandage (Gauze)', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(71, 'Elastic Bandage (Gauze)', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(73, 'Paracetamol', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(74, 'Mefenamic', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(75, 'Cherifer', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `products` (`id`, `product_name`, `categories_id`, `price`, `expiration_date`, `batch`, `supplier`, `branches_id`, `type`, `generic_name`, `dosage`, `form`, `strength`, `route_of_administration`, `manufacturer`, `prescription_required`, `side_effects`, `contraindications`, `storage_instructions`, `active_ingredients`, `sku`, `packaging_type`, `material_type`, `specifications`, `supplier_name`, `warranty`, `usage_instructions`) VALUES
+(34, '', 0, 0, '2025-05-07', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(36, 'Ibuprofen', 1, 0, '2026-02-03', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 'Ibuprofens', 1, 0, '2026-02-19', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 'Amlodipine', 1, 0, '2025-03-19', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 'Omeprazole', 1, 0, '2025-12-03', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(41, 'Omeprazole', 1, 0, '2025-12-03', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, 'Cetirizine', 1, 0, '2027-10-03', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, 'Metformin', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(46, 'Losartan', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, 'Losartan', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, 'Salbutamol', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, 'Salbutamol', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(50, 'Loratadine', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 'Loratadine', 1, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 'Surgical Gloves', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(53, 'Surgical Gloves', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(54, 'Sterile Gauze Pads', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(55, 'Sterile Gauze Pads', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 'Thermometer (Digital)', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 'Thermometer (Digital)', 2, 0, '2028-11-16', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 'Hypodermic Needles', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 'Hypodermic Needles', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 'Face Masks (Surgical)', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 'Face Masks (Surgical)', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 'Alcohol Prep Pads', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 'Alcohol Prep Pads', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 'Blood Pressure Cuff', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 'Blood Pressure Cuff', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, 'Cotton Balls', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 'Cotton Balls', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 'Surgical Scalpels', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 'Surgical Scalpels', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 'Elastic Bandage (Gauze)', 2, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 'Elastic Bandage (Gauze)', 2, 0, '0000-00-00', '', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(73, 'Paracetamol', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(74, 'Mefenamic', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(75, 'Cherifer', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(76, 'Medicol', 1, 0, '0000-00-00', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -341,7 +383,9 @@ INSERT INTO `release_stock` (`id`, `delivery_id`, `branches_id`, `quantity`, `re
 (2, 2, 2, '1', '2025-02-17 02:34:26'),
 (3, 2, 3, '3', '2025-04-25 06:53:01'),
 (4, 2, 2, '4', '2025-04-25 07:27:41'),
-(5, 2, 5, '4', '2025-04-25 08:14:56');
+(5, 2, 5, '4', '2025-04-25 08:14:56'),
+(6, 3, 2, '1', '2025-05-05 06:17:32'),
+(7, 2, 2, '1', '2025-05-05 06:17:32');
 
 -- --------------------------------------------------------
 
@@ -377,7 +421,14 @@ INSERT INTO `transaction` (`id`, `transaction_no`, `products_id`, `total_price`,
 (78, 73721, 36, 12, '30', '2025-04-25 06:56:25'),
 (79, 73721, 40, 80, '30', '2025-04-25 06:56:25'),
 (80, 37526, 40, 120, '10', '2025-04-25 08:19:32'),
-(81, 37526, 36, 18, '10', '2025-04-25 08:19:32');
+(81, 37526, 36, 18, '10', '2025-04-25 08:19:32'),
+(82, 24085, 36, 0, '13', '2025-05-02 04:12:54'),
+(83, 24085, 40, 0, '13', '2025-05-02 04:12:54'),
+(84, 24085, 34, 0, '13', '2025-05-02 04:12:54'),
+(85, 63854, 36, 18, '20', '2025-05-05 07:08:48'),
+(86, 63854, 40, 40, '20', '2025-05-05 07:08:48'),
+(87, 63364, 36, 9, '0', '2025-05-05 07:11:17'),
+(88, 63364, 40, 40, '0', '2025-05-05 07:11:17');
 
 -- --------------------------------------------------------
 
@@ -412,9 +463,9 @@ INSERT INTO `users` (`id`, `username`, `email`, `cpnumber`, `password`, `name`, 
 (29, 'arcyinv.jact', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s', 3, NULL),
 (30, 'arcyinv.jact', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s', 3, 3),
 (31, 'arcycash.jact', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s', 4, 3),
-(32, 'arcyadmin.jacsj', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s', 2, 4),
-(33, 'arcyinv.jacjs', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s', 3, 4),
-(34, 'arcycash.jacsj', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s', 4, 4),
+(32, 'arcyadmin.jacsj', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s SJ', 2, 4),
+(33, 'arcyinv.jacjs', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s SJ', 3, 4),
+(34, 'arcycash.jacsj', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jacfil\'s SJ', 4, 4),
 (35, 'arcyadmin.jas', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jascha', 2, 5),
 (36, 'arcyinv.jas', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jascha', 3, 5),
 (37, 'arcycash.jas', 'arcyreburon0@gmail.com', '0919 368 6141', '202cb962ac59075b964b07152d234b70', 'Arcy Jascha', 4, 5),
@@ -469,6 +520,12 @@ ALTER TABLE `categories`
 ALTER TABLE `delivery`
   ADD PRIMARY KEY (`id`),
   ADD KEY `categories_id` (`categories_id`);
+
+--
+-- Indexes for table `dosage_forms`
+--
+ALTER TABLE `dosage_forms`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `inventory`
@@ -552,13 +609,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `delivery`
 --
 ALTER TABLE `delivery`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `dosage_forms`
+--
+ALTER TABLE `dosage_forms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -576,19 +639,19 @@ ALTER TABLE `others`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `release_stock`
 --
 ALTER TABLE `release_stock`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `users`
